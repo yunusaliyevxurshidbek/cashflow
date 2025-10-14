@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/usecase/usecase.dart';
-import '../../../domain/entities/transaction_entity.dart';
 import '../../../domain/usecases/add_transaction.dart';
 import '../../../domain/usecases/delete_transaction.dart';
 import '../../../domain/usecases/export_json.dart';
@@ -47,7 +46,6 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
     on<ExportJsonRequested>(_onExport);
     on<ImportJsonRequested>(_onImport);
 
-    // When filter changes, reload list
     _filterSub = filterBloc.stream.listen((state) {
       add(LoadTransactionsRequested());
     });

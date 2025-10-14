@@ -10,7 +10,6 @@ import 'package:income_expense_tracker/features/transactions/presentation/bloc/t
 import 'package:income_expense_tracker/features/transactions/presentation/bloc/transaction/transaction_event.dart';
 import 'package:income_expense_tracker/features/transactions/presentation/widgets/custom_snacbar.dart';
 import 'package:uuid/uuid.dart';
-
 import '../../../bloc/balance/balance_bloc.dart';
 import '../../../bloc/balance/balance_event.dart';
 import '../../main_page.dart';
@@ -79,7 +78,8 @@ class _AddPageWidgetState extends State<AddPageWidget> {
               children: [
                 Text(
                   'Transaction Type',
-                  style: AppTypography.cardTitle(context).copyWith(fontSize: 14.sp),
+                  style: AppTypography.cardTitle(context)
+                      .copyWith(fontSize: 14.sp),
                 ),
                 AppSpacing.verticalSm,
                 SegmentedButton<TransactionType>(
@@ -98,6 +98,10 @@ class _AddPageWidgetState extends State<AddPageWidget> {
                   selected: {_type},
                   onSelectionChanged: (s) => setState(() => _type = s.first),
                   style: ButtonStyle(
+                    visualDensity: VisualDensity.compact,
+                    padding: WidgetStateProperty.all(
+                      const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                    ),
                     backgroundColor: WidgetStateProperty.resolveWith((states) {
                       if (states.contains(WidgetState.selected)) {
                         return _type == TransactionType.income
@@ -125,11 +129,13 @@ class _AddPageWidgetState extends State<AddPageWidget> {
           TextFormField(
             controller: _categoryController,
             decoration: const InputDecoration(
-              prefixIcon: Icon(Icons.category_outlined, color: AppColors.mutedText),
+              prefixIcon:
+                  Icon(Icons.category_outlined, color: AppColors.mutedText),
               labelText: 'Category',
               hintText: 'e.g., Food, Salary, Transport',
             ),
-            validator: (v) => (v == null || v.trim().isEmpty) ? 'Category is required' : null,
+            validator: (v) =>
+                (v == null || v.trim().isEmpty) ? 'Category is required' : null,
             textCapitalization: TextCapitalization.words,
           ),
           AppSpacing.verticalMd,
@@ -145,7 +151,8 @@ class _AddPageWidgetState extends State<AddPageWidget> {
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             validator: (v) {
               final d = double.tryParse(v ?? '');
-              if (d == null || d <= 0) return 'Please enter a valid amount greater than 0';
+              if (d == null || d <= 0)
+                return 'Please enter a valid amount greater than 0';
               return null;
             },
           ),
@@ -185,7 +192,7 @@ class _AddPageWidgetState extends State<AddPageWidget> {
               child: Row(
                 children: [
                   SvgPicture.asset(
-                      "assets/icons/calendar.svg",
+                    "assets/icons/calendar.svg",
                     colorFilter: const ColorFilter.mode(
                       AppColors.mutedText,
                       BlendMode.srcIn,
@@ -205,7 +212,8 @@ class _AddPageWidgetState extends State<AddPageWidget> {
                       ),
                     ),
                   ),
-                  const Icon(Icons.keyboard_arrow_down, color: AppColors.mutedText),
+                  const Icon(Icons.keyboard_arrow_down,
+                      color: AppColors.mutedText),
                 ],
               ),
             ),
@@ -227,7 +235,9 @@ class _AddPageWidgetState extends State<AddPageWidget> {
           AppSpacing.verticalXxl,
 
           // submit_button:
-          _GradientButton(text: _id == null ? 'Add Transaction' : 'Update Transaction', onPressed: _valid ? _submit : null),
+          _GradientButton(
+              text: _id == null ? 'Add Transaction' : 'Update Transaction',
+              onPressed: _valid ? _submit : null),
         ],
       ),
     );
@@ -242,7 +252,9 @@ class _AddPageWidgetState extends State<AddPageWidget> {
       category: _categoryController.text.trim(),
       amount: double.parse(_amountController.text.trim()),
       date: _date!,
-      note: _noteController.text.trim().isEmpty ? null : _noteController.text.trim(),
+      note: _noteController.text.trim().isEmpty
+          ? null
+          : _noteController.text.trim(),
     );
 
     final transactionBloc = context.read<TransactionBloc>();
@@ -267,7 +279,6 @@ class _AddPageWidgetState extends State<AddPageWidget> {
     transactionBloc.add(LoadTransactionsRequested());
     balanceBloc.add(LoadBalanceRequested());
 
-    // Clear all fields
     _categoryController.clear();
     _amountController.clear();
     _date = null;
@@ -276,10 +287,8 @@ class _AddPageWidgetState extends State<AddPageWidget> {
     _type = TransactionType.expense;
     setState(() {});
 
-    // Switch to home tab
     MainPage.globalKey.currentState?.switchToHome();
   }
-
 }
 
 class _GradientButton extends StatelessWidget {
@@ -329,4 +338,3 @@ class _GradientButton extends StatelessWidget {
     );
   }
 }
-

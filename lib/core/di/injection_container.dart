@@ -37,8 +37,12 @@ Future<void> initDependencies() async {
   sl.registerLazySingleton(() => ExportJson(sl()));
   sl.registerLazySingleton(() => ImportJson(sl()));
 
-  sl.registerFactory(() => FilterBloc());
-  sl.registerFactory(() => BalanceBloc(getBalanceSummary: sl()));
+  // Provide shared instances of FilterBloc and BalanceBloc across the app
+  // so TransactionBloc interacts with the same blocs used by the UI.
+  sl.registerLazySingleton<FilterBloc>(() => FilterBloc());
+  sl.registerLazySingleton<BalanceBloc>(() => BalanceBloc(getBalanceSummary: sl()));
+
+  // TransactionBloc remains a factory, but it receives the shared blocs above.
   sl.registerFactory(() => TransactionBloc(
     addTransaction: sl(),
     updateTransaction: sl(),
@@ -47,8 +51,8 @@ Future<void> initDependencies() async {
     filterTransactions: sl(),
     exportJson: sl(),
     importJson: sl(),
-    filterBloc: sl(),
-    balanceBloc: sl(),
+    filterBloc: sl<FilterBloc>(),
+    balanceBloc: sl<BalanceBloc>(),
   ));
 }
 
