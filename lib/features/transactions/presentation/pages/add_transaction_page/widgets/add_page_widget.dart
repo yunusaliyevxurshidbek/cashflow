@@ -13,6 +13,7 @@ import 'package:uuid/uuid.dart';
 
 import '../../../bloc/balance/balance_bloc.dart';
 import '../../../bloc/balance/balance_event.dart';
+import '../../main_page.dart';
 
 class AddPageWidget extends StatefulWidget {
   final TransactionEntity? initial;
@@ -249,29 +250,13 @@ class _AddPageWidgetState extends State<AddPageWidget> {
 
     if (_id == null) {
       transactionBloc.add(AddTransactionRequested(entity));
-
-      transactionBloc.add(LoadTransactionsRequested());
-      balanceBloc.add(LoadBalanceRequested());
-
       CustomSnacbar.show(
         context,
         isError: false,
         text: 'Income/Expense added successfully',
       );
-
-      if (!widget.popOnSubmit) {
-        _categoryController.clear();
-        _amountController.clear();
-        _date = null;
-        _noteController.clear();
-        setState(() {});
-        return;
-      }
     } else {
       transactionBloc.add(UpdateTransactionRequested(entity));
-      transactionBloc.add(LoadTransactionsRequested());
-      balanceBloc.add(LoadBalanceRequested());
-
       CustomSnacbar.show(
         context,
         isError: false,
@@ -279,9 +264,20 @@ class _AddPageWidgetState extends State<AddPageWidget> {
       );
     }
 
-    if (widget.popOnSubmit && Navigator.canPop(context)) {
-      Navigator.pop(context);
-    }
+    transactionBloc.add(LoadTransactionsRequested());
+    balanceBloc.add(LoadBalanceRequested());
+
+    // Clear all fields
+    _categoryController.clear();
+    _amountController.clear();
+    _date = null;
+    _noteController.clear();
+    _id = null;
+    _type = TransactionType.expense;
+    setState(() {});
+
+    // Switch to home tab
+    MainPage.globalKey.currentState?.switchToHome();
   }
 
 }

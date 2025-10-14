@@ -20,7 +20,7 @@ class IncomeExpenseApp extends StatelessWidget {
       darkTheme: dark,
       initialRoute: '/',
       routes: {
-        '/': (_) => const MainPage(),
+        '/': (_) => MainPage(key: MainPage.globalKey),
         '/transactions': (_) => const TransactionsPage(),
         '/form': (_) => const AddPage(),
         '/analysis': (_) => const AnalysisPage(),

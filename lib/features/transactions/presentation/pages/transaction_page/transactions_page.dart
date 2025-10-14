@@ -103,9 +103,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
           Expanded(
             child: BlocConsumer<TransactionBloc, TransactionState>(
               listener: (context, state) async {
-                if (state is TransactionOperationSuccess) {
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.message)));
-                } else if (state is TransactionImportSuccess) {
+                if (state is TransactionImportSuccess) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Imported ${state.countImported} items')));
                 } else if (state is TransactionError) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.errorMessage)));

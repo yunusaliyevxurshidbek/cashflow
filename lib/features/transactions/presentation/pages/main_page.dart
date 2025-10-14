@@ -11,6 +11,8 @@ import 'transaction_page/transactions_page.dart';
 class MainPage extends StatefulWidget {
   const MainPage({super.key});
 
+  static final GlobalKey<_MainPageState> globalKey = GlobalKey<_MainPageState>();
+
   @override
   State<MainPage> createState() => _MainPageState();
 }
@@ -18,6 +20,11 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   final _controller = NotchBottomBarController(index: 0);
   int _index = 0;
+
+  void switchToHome() {
+    setState(() => _index = 0);
+    _controller.jumpTo(0);
+  }
 
   final _pages = const [
     HomePage(),

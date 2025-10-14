@@ -112,6 +112,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
     try {
       final jsonString = await exportJson( NoParams());
       emit(TransactionExportSuccess(jsonString));
+      add(LoadTransactionsRequested());
     } catch (e) {
       emit(TransactionError('Export failed: $e'));
     }
