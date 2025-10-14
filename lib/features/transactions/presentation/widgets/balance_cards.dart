@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
 import '../../../../core/utils/formatters.dart';
 import '../../../../core/constants/app_colors.dart';
+import '../../../../core/constants/app_spacing.dart';
+import '../../../../core/constants/app_typography.dart';
 
 class BalanceCards extends StatelessWidget {
   final double totalIncome;
@@ -16,13 +17,36 @@ class BalanceCards extends StatelessWidget {
       children: [
         Row(
           children: [
-            Expanded(child: _CardTile(title: 'Total Income', value: '+${formatAmount(totalIncome)}', color: AppColors.income)),
-            SizedBox(width: 12.w),
-            Expanded(child: _CardTile(title: 'Total Expense', value: '-${formatAmount(totalExpense)}', color: AppColors.expense)),
+            Expanded(
+              child: _CardTile(
+                title: 'Total Income',
+                value: '+${formatAmount(totalIncome)}',
+                color: AppColors.income,
+                gradient: AppColors.incomeGradient,
+                icon: Icons.arrow_upward,
+              ),
+            ),
+            AppSpacing.horizontalMd,
+            Expanded(
+              child: _CardTile(
+                title: 'Total Expense',
+                value: '-${formatAmount(totalExpense)}',
+                color: AppColors.expense,
+                gradient: AppColors.expenseGradient,
+                icon: Icons.arrow_downward,
+              ),
+            ),
           ],
         ),
-        SizedBox(height: 12.h),
-        _CardTile(title: 'Net Balance', value: formatAmount(netBalance), color: Theme.of(context).colorScheme.primary),
+        AppSpacing.verticalMd,
+        _CardTile(
+          title: 'Net Balance',
+          value: formatAmount(netBalance),
+          color: Theme.of(context).colorScheme.primary,
+          gradient: AppColors.primaryGradient,
+          icon: Icons.account_balance_wallet,
+          isFullWidth: true,
+        ),
       ],
     );
   }
@@ -32,19 +56,62 @@ class _CardTile extends StatelessWidget {
   final String title;
   final String value;
   final Color color;
-  const _CardTile({required this.title, required this.value, required this.color});
+  final LinearGradient gradient;
+  final IconData icon;
+  final bool isFullWidth;
+  const _CardTile({
+    required this.title,
+    required this.value,
+    required this.color,
+    required this.gradient,
+    required this.icon,
+    this.isFullWidth = false,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 1,
-      child: Padding(
-        padding: EdgeInsets.all(16.w),
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(title, style: Theme.of(context).textTheme.bodyMedium),
-          SizedBox(height: 8.h),
-          Text(value, style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: color, fontWeight: FontWeight.w700)),
-        ]),
+    return Container(
+      padding: AppSpacing.cardPadding,
+      decoration: BoxDecoration(
+        gradient: gradient,
+        borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
+        boxShadow: [
+          BoxShadow(
+            color: color.withOpacity(0.3),
+            blurRadius: 12,
+            offset: const Offset(0, 6),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(icon, color: Colors.white.withOpacity(0.9), size: AppSpacing.iconMd),
+              AppSpacing.horizontalSm,
+              Expanded(
+                child: Text(
+                  title,
+                  style: AppTypography.cardSubtitle(context).copyWith(
+                    color: Colors.white.withOpacity(0.9),
+                    fontSize: 12.sp,
+                  ),
+                ),
+              ),
+            ],
+          ),
+          AppSpacing.verticalMd,
+          Text(
+            value,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 20.sp,
+              fontWeight: FontWeight.w800,
+              letterSpacing: 0.5,
+            ),
+          ),
+        ],
       ),
     );
   }

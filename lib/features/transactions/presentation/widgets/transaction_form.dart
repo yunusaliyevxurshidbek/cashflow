@@ -4,6 +4,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:income_expense_tracker/features/transactions/domain/entities/transaction_entity.dart';
 import 'package:income_expense_tracker/features/transactions/presentation/bloc/transaction/transaction_bloc.dart';
 import 'package:income_expense_tracker/features/transactions/presentation/bloc/transaction/transaction_event.dart';
+import 'package:income_expense_tracker/core/constants/app_colors.dart';
+import 'package:income_expense_tracker/core/constants/app_spacing.dart';
+import 'package:income_expense_tracker/core/constants/app_typography.dart';
 import 'package:uuid/uuid.dart';
 
 /// Reusable Transaction Form used across Add tab and standalone page
@@ -57,54 +60,158 @@ class _TransactionFormState extends State<TransactionForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SegmentedButton<TransactionType>(
-            segments: const [
-              ButtonSegment(value: TransactionType.income, label: Text('Income'), icon: Icon(Icons.arrow_downward)),
-              ButtonSegment(value: TransactionType.expense, label: Text('Expense'), icon: Icon(Icons.arrow_upward)),
-            ],
-            selected: {_type},
-            onSelectionChanged: (s) => setState(() => _type = s.first),
+          // Type Selection
+          Container(
+            padding: AppSpacing.cardPaddingSmall,
+            decoration: BoxDecoration(
+              color: AppColors.surfaceVariant,
+              borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
+              border: Border.all(color: AppColors.border),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  'Transaction Type',
+                  style: AppTypography.cardTitle(context).copyWith(fontSize: 14.sp),
+                ),
+                AppSpacing.verticalSm,
+                SegmentedButton<TransactionType>(
+                  segments: const [
+                    ButtonSegment(
+                      value: TransactionType.income,
+                      label: Text('Income'),
+                      icon: Icon(Icons.arrow_downward),
+                    ),
+                    ButtonSegment(
+                      value: TransactionType.expense,
+                      label: Text('Expense'),
+                      icon: Icon(Icons.arrow_upward),
+                    ),
+                  ],
+                  selected: {_type},
+                  onSelectionChanged: (s) => setState(() => _type = s.first),
+                  style: ButtonStyle(
+                    backgroundColor: MaterialStateProperty.resolveWith((states) {
+                      if (states.contains(MaterialState.selected)) {
+                        return _type == TransactionType.income
+                            ? AppColors.income.withOpacity(0.2)
+                            : AppColors.expense.withOpacity(0.2);
+                      }
+                      return AppColors.surface;
+                    }),
+                    foregroundColor: MaterialStateProperty.resolveWith((states) {
+                      if (states.contains(MaterialState.selected)) {
+                        return _type == TransactionType.income
+                            ? AppColors.income
+                            : AppColors.expense;
+                      }
+                      return AppColors.secondaryText;
+                    }),
+                  ),
+                ),
+              ],
+            ),
           ),
-          SizedBox(height: 16.h),
+          AppSpacing.verticalLg,
+
+          // Category Field
           TextFormField(
             controller: _categoryController,
-            decoration: InputDecoration(prefixIcon: const Icon(Icons.category_outlined), labelText: 'Category'),
-            validator: (v) => (v == null || v.trim().isEmpty) ? 'Category required' : null,
+            decoration: InputDecoration(
+              prefixIcon: Icon(Icons.category_outlined, color: AppColors.primary),
+              labelText: 'Category',
+              hintText: 'e.g., Food, Salary, Transport',
+            ),
+            validator: (v) => (v == null || v.trim().isEmpty) ? 'Category is required' : null,
+            textCapitalization: TextCapitalization.words,
           ),
-          SizedBox(height: 12.h),
+          AppSpacing.verticalMd,
+
+          // Amount Field
           TextFormField(
             controller: _amountController,
-            decoration: InputDecoration(prefixIcon: const Icon(Icons.attach_money), labelText: 'Amount'),
+            decoration: InputDecoration(
+              prefixIcon: Icon(Icons.attach_money, color: AppColors.primary),
+              labelText: 'Amount',
+              hintText: '0.00',
+            ),
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             validator: (v) {
               final d = double.tryParse(v ?? '');
-              if (d == null || d <= 0) return 'Enter amount > 0';
+              if (d == null || d <= 0) return 'Please enter a valid amount greater than 0';
               return null;
             },
           ),
-          SizedBox(height: 12.h),
-          OutlinedButton.icon(
-            onPressed: () async {
+          AppSpacing.verticalMd,
+
+          // Date Picker
+          InkWell(
+            onTap: () async {
               final now = DateTime.now();
               final picked = await showDatePicker(
                 context: context,
                 initialDate: _date ?? now,
                 firstDate: DateTime(now.year - 5),
                 lastDate: DateTime(now.year + 5),
+                builder: (context, child) {
+                  return Theme(
+                    data: Theme.of(context).copyWith(
+                      colorScheme: ColorScheme.dark(
+                        primary: AppColors.primary,
+                        surface: AppColors.surface,
+                        onSurface: AppColors.secondaryText,
+                      ),
+                    ),
+                    child: child!,
+                  );
+                },
               );
               if (picked != null) setState(() => _date = picked);
             },
-            icon: const Icon(Icons.date_range),
-            label: Text(_date == null ? 'Pick date' : '${_date!.day}-${_date!.month}-${_date!.year}'),
+            child: Container(
+              padding: AppSpacing.cardPadding,
+              decoration: BoxDecoration(
+                border: Border.all(color: AppColors.border),
+                borderRadius: BorderRadius.circular(AppSpacing.radiusMd),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.date_range, color: AppColors.primary),
+                  AppSpacing.horizontalMd,
+                  Expanded(
+                    child: Text(
+                      _date == null
+                          ? 'Select date'
+                          : '${_date!.day}/${_date!.month}/${_date!.year}',
+                      style: TextStyle(
+                        color: _date == null ? AppColors.mutedText : AppColors.secondaryText,
+                        fontSize: 16.sp,
+                      ),
+                    ),
+                  ),
+                  Icon(Icons.keyboard_arrow_down, color: AppColors.mutedText),
+                ],
+              ),
+            ),
           ),
-          SizedBox(height: 12.h),
+          AppSpacing.verticalMd,
+
+          // Note Field
           TextFormField(
             controller: _noteController,
-            decoration: const InputDecoration(prefixIcon: Icon(Icons.notes), labelText: 'Note (optional)'),
-            maxLines: 2,
+            decoration: InputDecoration(
+              prefixIcon: Icon(Icons.notes, color: AppColors.primary),
+              labelText: 'Note (optional)',
+              hintText: 'Add a note for this transaction',
+            ),
+            maxLines: 3,
+            textCapitalization: TextCapitalization.sentences,
           ),
-          SizedBox(height: 20.h),
-          _GradientButton(text: _id == null ? 'Add' : 'Update', onPressed: _valid ? _submit : null),
+          AppSpacing.verticalXxl,
+
+          // Submit Button
+          _GradientButton(text: _id == null ? 'Add Transaction' : 'Update Transaction', onPressed: _valid ? _submit : null),
         ],
       ),
     );
@@ -156,20 +263,32 @@ class _GradientButton extends StatelessWidget {
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(16.r),
-          gradient: LinearGradient(colors: [Theme.of(context).colorScheme.primary, Theme.of(context).colorScheme.primary.withOpacity(0.8)]),
+          borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
+          gradient: AppColors.primaryGradient,
           boxShadow: [
-            BoxShadow(color: Theme.of(context).colorScheme.primary.withOpacity(0.35), blurRadius: 16.r, offset: const Offset(0, 8)),
+            BoxShadow(
+              color: AppColors.primary.withOpacity(0.3),
+              blurRadius: AppSpacing.elevationXl,
+              offset: const Offset(0, 4),
+            ),
           ],
         ),
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            borderRadius: BorderRadius.circular(16.r),
+            borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
             onTap: onPressed,
             child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 14.h),
-              child: Center(child: Text(text, style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700, color: Colors.black))),
+              padding: EdgeInsets.symmetric(vertical: AppSpacing.lg),
+              child: Center(
+                child: Text(
+                  text,
+                  style: AppTypography.buttonText(context).copyWith(
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+              ),
             ),
           ),
         ),

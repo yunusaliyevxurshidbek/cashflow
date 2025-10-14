@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:income_expense_tracker/features/transactions/presentation/widgets/transaction_form.dart';
-import 'package:uuid/uuid.dart';
 import '../../domain/entities/transaction_entity.dart';
-import '../bloc/transaction/transaction_bloc.dart';
-import '../bloc/transaction/transaction_event.dart';
 
 class TransactionFormPage extends StatefulWidget {
   const TransactionFormPage({super.key});
@@ -50,7 +47,13 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(_id == null ? 'Add Transaction' : 'Edit Transaction')),
-      body: SingleChildScrollView(padding: EdgeInsets.all(16.w), child: TransactionForm(initial: _id == null ? null : _buildEntity(), popOnSubmit: true)),
+      body: SingleChildScrollView(
+        padding: EdgeInsets.all(16.w), 
+        child: TransactionForm(
+          initial: _id == null ? null : _buildEntity(), 
+          popOnSubmit: true,
+          ),
+        ),
     );
   }
 

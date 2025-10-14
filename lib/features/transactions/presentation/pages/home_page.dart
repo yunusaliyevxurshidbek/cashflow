@@ -47,7 +47,6 @@ class _HomePageState extends State<HomePage> {
           },
         ),
       ),
-      // FAB is redundant with bottom nav Add tab; keeping page minimal.
-    );
+   );
   }
 }
