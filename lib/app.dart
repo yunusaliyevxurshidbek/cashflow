@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-
 import 'core/constants/app_theme.dart';
 import 'core/constants/app_typography.dart';
+import 'features/transactions/presentation/pages/analysis_page.dart';
 import 'features/transactions/presentation/pages/shell_page.dart';
 import 'features/transactions/presentation/pages/transaction_form_page.dart';
 import 'features/transactions/presentation/pages/transactions_page.dart';
-import 'features/transactions/presentation/pages/analysis_page.dart';
 
 class IncomeExpenseApp extends StatelessWidget {
   const IncomeExpenseApp({super.key});
