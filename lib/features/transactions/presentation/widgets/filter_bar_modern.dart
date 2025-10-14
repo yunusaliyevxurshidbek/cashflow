@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-
-import '../../../domain/entities/transaction_entity.dart';
+import '../../domain/entities/transaction_entity.dart';
 import '../bloc/filter/filter_state.dart';
 
 typedef OnApplyFilter = void Function(FilterState state);
@@ -45,9 +44,9 @@ class _FilterBarModernState extends State<FilterBarModern> {
         SegmentedButton<TransactionType?>(
           style: ButtonStyle(visualDensity: VisualDensity.compact, shape: MaterialStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)))),
           segments: [
-            ButtonSegment(value: null, label: Text('All', style: TextStyle(fontSize: 12.sp)), icon: Icon(PhosphorIcons.regular.rows, size: 16.sp)),
-            ButtonSegment(value: TransactionType.income, label: Text('Income', style: TextStyle(fontSize: 12.sp)), icon: Icon(PhosphorIcons.regular.arrowDown, size: 16.sp)),
-            ButtonSegment(value: TransactionType.expense, label: Text('Expense', style: TextStyle(fontSize: 12.sp)), icon: Icon(PhosphorIcons.regular.arrowUp, size: 16.sp)),
+            ButtonSegment(value: null, label: Text('All', style: TextStyle(fontSize: 12.sp)), icon: Icon(PhosphorIconsRegular.rows, size: 16.sp)),
+            ButtonSegment(value: TransactionType.income, label: Text('Income', style: TextStyle(fontSize: 12.sp)), icon: Icon(PhosphorIconsRegular.arrowDown, size: 16.sp)),
+            ButtonSegment(value: TransactionType.expense, label: Text('Expense', style: TextStyle(fontSize: 12.sp)), icon: Icon(PhosphorIconsRegular.arrowUp, size: 16.sp)),
           ],
           selected: {_type},
           onSelectionChanged: (s) => setState(() => _type = s.first),
@@ -70,7 +69,7 @@ class _FilterBarModernState extends State<FilterBarModern> {
                     _end = r.end;
                   });
                 },
-                icon: Icon(PhosphorIcons.regular.calendar, size: 18.sp),
+                icon: Icon(PhosphorIconsRegular.calendar, size: 18.sp),
                 label: Text(_start == null ? 'Date range' : '${_start!.day}/${_start!.month} - ${_end!.day}/${_end!.month}'),
               ),
             ),
@@ -80,8 +79,7 @@ class _FilterBarModernState extends State<FilterBarModern> {
                 value: _category,
                 isExpanded: true,
                 decoration: const InputDecoration(prefixIcon: Icon(Icons.category_outlined), labelText: 'Category'),
-                items: <String>['All', ...widget.categories]
-                    .toSet()
+                items: <String>{'All', ...widget.categories}
                     .map((c) => DropdownMenuItem<String?>(value: c == 'All' ? null : c, child: Text(c)))
                     .toList(),
                 onChanged: (v) => setState(() => _category = v),
@@ -91,7 +89,7 @@ class _FilterBarModernState extends State<FilterBarModern> {
         ),
         SizedBox(height: 8.h),
         TextField(
-          decoration: InputDecoration(prefixIcon: Icon(PhosphorIcons.regular.magnifyingGlass, size: 18.sp), labelText: 'Search'),
+          decoration: InputDecoration(prefixIcon: Icon(PhosphorIconsRegular.magnifyingGlass, size: 18.sp), labelText: 'Search'),
           onChanged: (v) => _search = v.trim().isEmpty ? null : v.trim(),
         ),
         SizedBox(height: 10.h),

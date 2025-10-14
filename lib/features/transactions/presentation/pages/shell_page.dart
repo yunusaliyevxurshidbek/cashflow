@@ -2,7 +2,6 @@ import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_not
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
-
 import 'analysis_page.dart';
 import 'transactions_page.dart';
 import 'add_tab_page.dart';
@@ -49,18 +48,18 @@ class _ShellPageState extends State<ShellPage> {
         durationInMilliSeconds: 220,
         bottomBarItems: [
           BottomBarItem(
-            inActiveItem: Icon(PhosphorIcons.regular.list, size: 22.sp),
-            activeItem: Icon(PhosphorIcons.fill.list, size: 22.sp),
+            inActiveItem: Icon(PhosphorIconsRegular.list, size: 22.sp),
+            activeItem: Icon(PhosphorIconsFill.list, size: 22.sp),
             itemLabel: 'Transactions',
           ),
           BottomBarItem(
-            inActiveItem: Icon(PhosphorIcons.regular.chartBar, size: 22.sp),
-            activeItem: Icon(PhosphorIcons.fill.chartBar, size: 22.sp),
+            inActiveItem: Icon(PhosphorIconsRegular.chartBar, size: 22.sp),
+            activeItem: Icon(PhosphorIconsFill.chartBar, size: 22.sp),
             itemLabel: 'Analysis',
           ),
           BottomBarItem(
-            inActiveItem: Icon(PhosphorIcons.regular.plusCircle, size: 22.sp),
-            activeItem: Icon(PhosphorIcons.fill.plusCircle, size: 22.sp),
+            inActiveItem: Icon(PhosphorIconsRegular.plusCircle, size: 22.sp),
+            activeItem: Icon(PhosphorIconsFill.plusCircle, size: 22.sp),
             itemLabel: 'Add',
           ),
         ],
@@ -86,7 +85,7 @@ class _BuildCenterFab extends StatelessWidget {
         onPressed: onPressed,
         backgroundColor: Theme.of(context).colorScheme.primary,
         elevation: 6,
-        child: Icon(PhosphorIcons.bold.plus, color: Colors.black, size: 28.sp),
+        child: Icon(PhosphorIconsBold.plus, color: Colors.black, size: 28.sp),
       ),
     );
   }
