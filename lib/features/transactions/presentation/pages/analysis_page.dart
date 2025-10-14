@@ -36,7 +36,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
         ],
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.w),
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
         child: BlocBuilder<TransactionBloc, TransactionState>(
           builder: (context, state) {
             return AnimatedSwitcher(
@@ -51,7 +51,16 @@ class _AnalysisPageState extends State<AnalysisPage> {
                     if (t.type == TransactionType.income) monthlyIncome[idx] += t.amount;
                     if (t.type == TransactionType.expense) monthlyExpense[idx] += t.amount;
                   }
-                  return _buildBarChart(monthlyIncome, monthlyExpense);
+                  final totalIncome = monthlyIncome.reduce((a, b) => a + b);
+                  final totalExpense = monthlyExpense.reduce((a, b) => a + b);
+                  final net = totalIncome - totalExpense;
+                  return Column(
+                    children: [
+                      _SummaryRow(totalIncome: totalIncome, totalExpense: totalExpense, net: net),
+                      SizedBox(height: 12.h),
+                      Expanded(child: _buildBarChart(monthlyIncome, monthlyExpense)),
+                    ],
+                  );
                 }
                 if (state is TransactionLoading) return const Center(child: CircularProgressIndicator());
                 if (state is TransactionEmpty) return const Center(child: Text('No data for chart'));
@@ -109,6 +118,39 @@ class _AnalysisPageState extends State<AnalysisPage> {
             _Legend(color: Colors.red, text: 'Expense'),
           ],
         ),
+      ],
+    );
+  }
+}
+
+class _SummaryRow extends StatelessWidget {
+  final double totalIncome;
+  final double totalExpense;
+  final double net;
+  const _SummaryRow({required this.totalIncome, required this.totalExpense, required this.net});
+
+  @override
+  Widget build(BuildContext context) {
+    Widget _card(String title, double value, Color color) => Expanded(
+          child: Card(
+            child: Padding(
+              padding: EdgeInsets.all(12.w),
+              child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Text(title, style: Theme.of(context).textTheme.bodySmall),
+                SizedBox(height: 6.h),
+                Text(value.toStringAsFixed(2), style: Theme.of(context).textTheme.titleMedium?.copyWith(color: color)),
+              ]),
+            ),
+          ),
+        );
+
+    return Row(
+      children: [
+        _card('Income', totalIncome, const Color(0xFF4CAF50)),
+        SizedBox(width: 12.w),
+        _card('Expense', totalExpense, const Color(0xFFFF5E5E)),
+        SizedBox(width: 12.w),
+        _card('Net', net, Theme.of(context).colorScheme.primary),
       ],
     );
   }

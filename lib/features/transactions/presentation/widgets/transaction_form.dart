@@ -68,13 +68,13 @@ class _TransactionFormState extends State<TransactionForm> {
           SizedBox(height: 16.h),
           TextFormField(
             controller: _categoryController,
-            decoration: const InputDecoration(labelText: 'Category', border: OutlineInputBorder()),
+            decoration: InputDecoration(prefixIcon: const Icon(Icons.category_outlined), labelText: 'Category'),
             validator: (v) => (v == null || v.trim().isEmpty) ? 'Category required' : null,
           ),
           SizedBox(height: 12.h),
           TextFormField(
             controller: _amountController,
-            decoration: const InputDecoration(labelText: 'Amount', border: OutlineInputBorder()),
+            decoration: InputDecoration(prefixIcon: const Icon(Icons.attach_money), labelText: 'Amount'),
             keyboardType: const TextInputType.numberWithOptions(decimal: true),
             validator: (v) {
               final d = double.tryParse(v ?? '');
@@ -100,17 +100,11 @@ class _TransactionFormState extends State<TransactionForm> {
           SizedBox(height: 12.h),
           TextFormField(
             controller: _noteController,
-            decoration: const InputDecoration(labelText: 'Note (optional)', border: OutlineInputBorder()),
+            decoration: const InputDecoration(prefixIcon: Icon(Icons.notes), labelText: 'Note (optional)'),
             maxLines: 2,
           ),
           SizedBox(height: 20.h),
-          SizedBox(
-            width: double.infinity,
-            child: FilledButton(
-              onPressed: _valid ? _submit : null,
-              child: Text(_id == null ? 'Add' : 'Update'),
-            ),
-          ),
+          _GradientButton(text: _id == null ? 'Add' : 'Update', onPressed: _valid ? _submit : null),
         ],
       ),
     );
@@ -145,6 +139,42 @@ class _TransactionFormState extends State<TransactionForm> {
     if (widget.popOnSubmit && Navigator.canPop(context)) {
       Navigator.pop(context);
     }
+  }
+}
+
+class _GradientButton extends StatelessWidget {
+  final String text;
+  final VoidCallback? onPressed;
+  const _GradientButton({required this.text, this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    final enabled = onPressed != null;
+    return AnimatedOpacity(
+      duration: const Duration(milliseconds: 200),
+      opacity: enabled ? 1.0 : 0.6,
+      child: Container(
+        width: double.infinity,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16.r),
+          gradient: LinearGradient(colors: [Theme.of(context).colorScheme.primary, Theme.of(context).colorScheme.primary.withOpacity(0.8)]),
+          boxShadow: [
+            BoxShadow(color: Theme.of(context).colorScheme.primary.withOpacity(0.35), blurRadius: 16.r, offset: const Offset(0, 8)),
+          ],
+        ),
+        child: Material(
+          color: Colors.transparent,
+          child: InkWell(
+            borderRadius: BorderRadius.circular(16.r),
+            onTap: onPressed,
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 14.h),
+              child: Center(child: Text(text, style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w700, color: Colors.black))),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }
 

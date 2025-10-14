@@ -74,7 +74,7 @@ Future<void> main() async {
       builder: (context, _) => MultiBlocProvider(
         providers: [
           BlocProvider(create: (_) => filterBloc),
-          BlocProvider(create: (_) => balanceBloc),
+          BlocProvider(create: (_) => balanceBloc..add(LoadBalanceRequested())),
           BlocProvider(create: (_) => transactionBloc..add(LoadTransactionsRequested())),
         ],
         child: const IncomeExpenseApp(),

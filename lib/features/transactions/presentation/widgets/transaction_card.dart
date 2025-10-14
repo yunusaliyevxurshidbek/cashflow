@@ -16,12 +16,12 @@ class TransactionCard extends StatelessWidget {
     final color = isIncome ? AppColors.income : AppColors.expense;
     final prefix = isIncome ? '+' : '-';
     return Card(
-      elevation: 1,
+      elevation: 2,
       child: Padding(
-        padding: EdgeInsets.all(12.w),
+        padding: EdgeInsets.all(16.w),
         child: Row(
           children: [
-            CircleAvatar(backgroundColor: color.withOpacity(0.1), child: Icon(isIncome ? Icons.south_west : Icons.north_east, color: color, size: 18.sp)),
+            CircleAvatar(radius: 18.r, backgroundColor: color.withOpacity(0.15), child: Icon(isIncome ? Icons.south_west : Icons.north_east, color: color, size: 18.sp)),
             SizedBox(width: 12.w),
             Expanded(
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -46,6 +46,12 @@ class TransactionCard extends StatelessWidget {
               ]),
             ),
             SizedBox(width: 8.w),
+            Container(
+              padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+              decoration: BoxDecoration(color: color.withOpacity(0.15), borderRadius: BorderRadius.circular(12.r), border: Border.all(color: color.withOpacity(0.4))),
+              child: Text(isIncome ? 'Income' : 'Expense', style: Theme.of(context).textTheme.bodySmall?.copyWith(color: color, fontWeight: FontWeight.w600)),
+            ),
+            SizedBox(width: 4.w),
             IconButton(tooltip: 'Edit', onPressed: onEdit, icon: Icon(Icons.edit, size: 20.sp)),
             IconButton(tooltip: 'Delete', onPressed: onDelete, icon: Icon(Icons.delete_outline, size: 20.sp)),
           ],

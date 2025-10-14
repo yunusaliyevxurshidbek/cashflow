@@ -27,7 +27,7 @@ class _HomePageState extends State<HomePage> {
         title: Text('Dashboard', style: Theme.of(context).textTheme.titleLarge),
       ),
       body: Padding(
-        padding: EdgeInsets.all(16.w),
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
         child: BlocBuilder<BalanceBloc, BalanceState>(
           builder: (context, state) {
             if (state is BalanceLoading) {

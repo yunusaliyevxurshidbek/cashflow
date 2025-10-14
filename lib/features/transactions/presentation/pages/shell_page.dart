@@ -1,6 +1,7 @@
 import 'package:animated_notch_bottom_bar/animated_notch_bottom_bar/animated_notch_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:phosphor_flutter/phosphor_flutter.dart';
 
 import 'analysis_page.dart';
 import 'transactions_page.dart';
@@ -47,23 +48,45 @@ class _ShellPageState extends State<ShellPage> {
         blurOpacity: 0.05,
         durationInMilliSeconds: 220,
         bottomBarItems: [
-          const BottomBarItem(
-            inActiveItem: Icon(Icons.list_alt_outlined),
-            activeItem: Icon(Icons.list_alt),
+          BottomBarItem(
+            inActiveItem: Icon(PhosphorIcons.regular.list, size: 22.sp),
+            activeItem: Icon(PhosphorIcons.fill.list, size: 22.sp),
             itemLabel: 'Transactions',
           ),
-          const BottomBarItem(
-            inActiveItem: Icon(Icons.insights_outlined),
-            activeItem: Icon(Icons.insights),
+          BottomBarItem(
+            inActiveItem: Icon(PhosphorIcons.regular.chartBar, size: 22.sp),
+            activeItem: Icon(PhosphorIcons.fill.chartBar, size: 22.sp),
             itemLabel: 'Analysis',
           ),
-          const BottomBarItem(
-            inActiveItem: Icon(Icons.add_circle_outline),
-            activeItem: Icon(Icons.add_circle),
+          BottomBarItem(
+            inActiveItem: Icon(PhosphorIcons.regular.plusCircle, size: 22.sp),
+            activeItem: Icon(PhosphorIcons.fill.plusCircle, size: 22.sp),
             itemLabel: 'Add',
           ),
         ],
         onTap: (i) => setState(() => _index = i),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: _BuildCenterFab(onPressed: () => setState(() => _index = 2)),
+    );
+  }
+}
+
+class _BuildCenterFab extends StatelessWidget {
+  final VoidCallback onPressed;
+  const _BuildCenterFab({required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: 64.w,
+      height: 64.w,
+      child: FloatingActionButton(
+        heroTag: 'add_fab',
+        onPressed: onPressed,
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        elevation: 6,
+        child: Icon(PhosphorIcons.bold.plus, color: Colors.black, size: 28.sp),
       ),
     );
   }

@@ -9,8 +9,8 @@ class AddTabPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(16.w),
+    return SingleChildScrollView(
+      padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
       child: const TransactionForm(popOnSubmit: false),
     );
   }

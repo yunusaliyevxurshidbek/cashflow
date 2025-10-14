@@ -10,7 +10,7 @@ import '../bloc/transaction/transaction_event.dart';
 import '../bloc/transaction/transaction_state.dart';
 import '../widgets/empty_view.dart';
 import '../widgets/error_view.dart';
-import '../widgets/filter_bar.dart';
+import '../widgets/filter_bar_modern.dart';
 import '../widgets/loading_view.dart';
 import '../widgets/transaction_card.dart';
 
@@ -60,18 +60,24 @@ class _TransactionsPageState extends State<TransactionsPage> {
       body: Column(
         children: [
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 8.h),
+            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
             child: BlocBuilder<FilterBloc, FilterState>(
-              builder: (context, state) => FilterBar(
-                current: state,
-                onApply: (f) => context.read<FilterBloc>().add(ApplyFilterRequested(
-                      type: f.type,
-                      dateStart: f.dateStart,
-                      dateEnd: f.dateEnd,
-                      category: f.category,
-                      search: f.search,
-                    )),
-                onClear: () => context.read<FilterBloc>().add(ClearFilterRequested()),
+              builder: (context, fState) => BlocBuilder<TransactionBloc, TransactionState>(
+                builder: (context, tState) {
+                  final categories = tState is TransactionLoaded ? tState.items.map((e) => e.category).toSet().toList() : <String>[];
+                  return FilterBarModern(
+                    current: fState,
+                    categories: categories,
+                    onApply: (f) => context.read<FilterBloc>().add(ApplyFilterRequested(
+                          type: f.type,
+                          dateStart: f.dateStart,
+                          dateEnd: f.dateEnd,
+                          category: f.category,
+                          search: f.search,
+                        )),
+                    onClear: () => context.read<FilterBloc>().add(ClearFilterRequested()),
+                  );
+                },
               ),
             ),
           ),
@@ -116,7 +122,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                       final items = state.items;
                       return ListView.separated(
                         key: const ValueKey('list'),
-                        padding: EdgeInsets.all(12.w),
+                        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
                         itemCount: items.length,
                         separatorBuilder: (_, __) => SizedBox(height: 8.h),
                         itemBuilder: (context, index) {
