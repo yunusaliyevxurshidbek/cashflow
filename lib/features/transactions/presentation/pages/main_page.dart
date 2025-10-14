@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:income_expense_tracker/core/constants/app_colors.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'add_transaction_page/add_page.dart';
 import 'analysis_page/analysis_page.dart';
 import 'home_page/home_page.dart';
@@ -31,7 +30,10 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: _pages[_index],
+        child: IndexedStack(
+          index: _index,
+          children: _pages,
+        ),
       ),
       extendBody: true,
       bottomNavigationBar: AnimatedNotchBottomBar(
@@ -50,32 +52,52 @@ class _MainPageState extends State<MainPage> {
         durationInMilliSeconds: 400,
         bottomBarItems: [
           BottomBarItem(
-            inActiveItem: SvgPicture.asset("assets/icons/home.svg",colorFilter: const ColorFilter.mode(AppColors.mutedText, BlendMode.srcIn),),
-            activeItem: SvgPicture.asset("assets/icons/home.svg",colorFilter: const ColorFilter.mode(AppColors.heading, BlendMode.srcIn),),
+            inActiveItem: SvgPicture.asset(
+              "assets/icons/home.svg",
+              colorFilter: const ColorFilter.mode(AppColors.mutedText, BlendMode.srcIn),
+            ),
+            activeItem: SvgPicture.asset(
+              "assets/icons/home.svg",
+              colorFilter: const ColorFilter.mode(AppColors.heading, BlendMode.srcIn),
+            ),
             itemLabel: 'Home',
           ),
           BottomBarItem(
-            inActiveItem: SvgPicture.asset("assets/icons/transaction.svg",colorFilter: const ColorFilter.mode(AppColors.mutedText, BlendMode.srcIn),),
-            activeItem: SvgPicture.asset("assets/icons/transaction.svg",colorFilter: const ColorFilter.mode(AppColors.heading, BlendMode.srcIn),),
+            inActiveItem: SvgPicture.asset(
+              "assets/icons/transaction.svg",
+              colorFilter: const ColorFilter.mode(AppColors.mutedText, BlendMode.srcIn),
+            ),
+            activeItem: SvgPicture.asset(
+              "assets/icons/transaction.svg",
+              colorFilter: const ColorFilter.mode(AppColors.heading, BlendMode.srcIn),
+            ),
             itemLabel: 'Transactions',
           ),
           BottomBarItem(
-            inActiveItem: SvgPicture.asset("assets/icons/analysis.svg",colorFilter: const ColorFilter.mode(AppColors.mutedText, BlendMode.srcIn),),
-            activeItem: SvgPicture.asset("assets/icons/analysis.svg",colorFilter: const ColorFilter.mode(AppColors.heading, BlendMode.srcIn),),
+            inActiveItem: SvgPicture.asset(
+              "assets/icons/analysis.svg",
+              colorFilter: const ColorFilter.mode(AppColors.mutedText, BlendMode.srcIn),
+            ),
+            activeItem: SvgPicture.asset(
+              "assets/icons/analysis.svg",
+              colorFilter: const ColorFilter.mode(AppColors.heading, BlendMode.srcIn),
+            ),
             itemLabel: 'Analysis',
           ),
           BottomBarItem(
-            inActiveItem: SvgPicture.asset("assets/icons/add.svg",colorFilter: const ColorFilter.mode(AppColors.mutedText, BlendMode.srcIn),),
-            activeItem: SvgPicture.asset("assets/icons/add.svg",colorFilter: const ColorFilter.mode(AppColors.heading, BlendMode.srcIn),),
+            inActiveItem: SvgPicture.asset(
+              "assets/icons/add.svg",
+              colorFilter: const ColorFilter.mode(AppColors.mutedText, BlendMode.srcIn),
+            ),
+            activeItem: SvgPicture.asset(
+              "assets/icons/add.svg",
+              colorFilter: const ColorFilter.mode(AppColors.heading, BlendMode.srcIn),
+            ),
             itemLabel: 'Add',
           ),
         ],
         onTap: (i) => setState(() => _index = i),
       ),
-
     );
   }
 }
-
-
-

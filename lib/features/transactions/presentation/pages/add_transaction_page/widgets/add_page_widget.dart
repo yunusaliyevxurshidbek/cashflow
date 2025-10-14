@@ -11,6 +11,9 @@ import 'package:income_expense_tracker/features/transactions/presentation/bloc/t
 import 'package:income_expense_tracker/features/transactions/presentation/widgets/custom_snacbar.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../bloc/balance/balance_bloc.dart';
+import '../../../bloc/balance/balance_event.dart';
+
 class AddPageWidget extends StatefulWidget {
   final TransactionEntity? initial;
   final bool popOnSubmit;
@@ -231,6 +234,7 @@ class _AddPageWidgetState extends State<AddPageWidget> {
 
   void _submit() {
     if (!_valid) return;
+
     final entity = TransactionEntity(
       id: _id ?? const Uuid().v4(),
       type: _type,
@@ -239,14 +243,22 @@ class _AddPageWidgetState extends State<AddPageWidget> {
       date: _date!,
       note: _noteController.text.trim().isEmpty ? null : _noteController.text.trim(),
     );
-    final bloc = context.read<TransactionBloc>();
+
+    final transactionBloc = context.read<TransactionBloc>();
+    final balanceBloc = context.read<BalanceBloc>();
+
     if (_id == null) {
-      bloc.add(AddTransactionRequested(entity));
+      transactionBloc.add(AddTransactionRequested(entity));
+
+      transactionBloc.add(LoadTransactionsRequested());
+      balanceBloc.add(LoadBalanceRequested());
+
       CustomSnacbar.show(
         context,
         isError: false,
-        text: 'Income/Expense added successfully'
+        text: 'Income/Expense added successfully',
       );
+
       if (!widget.popOnSubmit) {
         _categoryController.clear();
         _amountController.clear();
@@ -256,17 +268,22 @@ class _AddPageWidgetState extends State<AddPageWidget> {
         return;
       }
     } else {
-      bloc.add(UpdateTransactionRequested(entity));
+      transactionBloc.add(UpdateTransactionRequested(entity));
+      transactionBloc.add(LoadTransactionsRequested());
+      balanceBloc.add(LoadBalanceRequested());
+
       CustomSnacbar.show(
-          context,
-          isError: false,
-          text: 'Transaction updated successfully'
+        context,
+        isError: false,
+        text: 'Transaction updated successfully',
       );
     }
+
     if (widget.popOnSubmit && Navigator.canPop(context)) {
       Navigator.pop(context);
     }
   }
+
 }
 
 class _GradientButton extends StatelessWidget {

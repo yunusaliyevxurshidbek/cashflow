@@ -21,7 +21,11 @@ Future<void> initDependencies() async {
   final appDir = await getApplicationDocumentsDirectory();
   final dbPath = '${appDir.path}/income_expense_tracker.db';
 
-  sl.registerLazySingleton(() => TransactionLocalDataSource(dbPath: dbPath)..init());
+  final localDataSource = TransactionLocalDataSource(dbPath: dbPath);
+  await localDataSource.init();
+
+  sl.registerLazySingleton<TransactionLocalDataSource>(() => localDataSource);
+
   sl.registerLazySingleton<TransactionRepository>(() => TransactionRepositoryImpl(sl()));
 
   sl.registerLazySingleton(() => AddTransaction(sl()));
@@ -47,3 +51,4 @@ Future<void> initDependencies() async {
     balanceBloc: sl(),
   ));
 }
+

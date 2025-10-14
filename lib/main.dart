@@ -44,4 +44,4 @@ Future<void> main() async {
 
 // chart types
 // export import yaxshi ishlamayapti
-// screen almashishida smotthlik kerak
+// home ga qaytish
