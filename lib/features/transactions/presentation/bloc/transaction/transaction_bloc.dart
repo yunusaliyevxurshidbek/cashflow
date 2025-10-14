@@ -80,7 +80,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
       await addTransaction(event.entity);
       balanceBloc.add(RecomputeBalanceRequested());
       add(LoadTransactionsRequested());
-      emit(const TransactionOperationSuccess('Income added successfully ✅'));
+      emit(const TransactionOperationSuccess('Income added successfully'));
     } catch (e) {
       emit(TransactionError('Add failed: $e'));
     }

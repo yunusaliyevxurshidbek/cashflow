@@ -1,5 +1,3 @@
-// GENERATED CODE - MANUAL CHECKED: If you change model, run build_runner.
-
 part of 'transaction_model.dart';
 
 TransactionModel _$TransactionModelFromJson(Map<String, dynamic> json) => TransactionModel(

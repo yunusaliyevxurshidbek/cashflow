@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../domain/entities/transaction_entity.dart';
-import '../bloc/filter/filter_state.dart';
+import '../../../../domain/entities/transaction_entity.dart';
+import '../../../bloc/filter/filter_state.dart';
 
 typedef OnApplyFilter = void Function(FilterState state);
 
@@ -61,10 +61,12 @@ class _FilterBarState extends State<FilterBar> {
                   lastDate: DateTime(now.year + 5),
                   initialDateRange: _start != null && _end != null ? DateTimeRange(start: _start!, end: _end!) : null,
                 );
-                if (r != null) setState(() {
+                if (r != null) {
+                  setState(() {
                   _start = r.start;
                   _end = r.end;
                 });
+                }
               },
               icon: Icon(Icons.date_range, size: 18.sp),
               label: Text(_start == null ? 'Date range' : '${_start!.day}/${_start!.month} - ${_end!.day}/${_end!.month}'),

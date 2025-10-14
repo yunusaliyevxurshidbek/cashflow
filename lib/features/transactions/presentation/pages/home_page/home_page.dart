@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:phosphor_flutter/phosphor_flutter.dart';
-import '../bloc/balance/balance_bloc.dart';
-import '../bloc/balance/balance_event.dart';
-import '../bloc/balance/balance_state.dart';
-import '../bloc/transaction/transaction_bloc.dart';
-import '../bloc/transaction/transaction_event.dart';
-import '../bloc/transaction/transaction_state.dart';
-import '../widgets/balance_cards.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:income_expense_tracker/core/constants/app_colors.dart';
+import '../../bloc/balance/balance_bloc.dart';
+import '../../bloc/balance/balance_event.dart';
+import '../../bloc/balance/balance_state.dart';
+import '../../bloc/transaction/transaction_bloc.dart';
+import '../../bloc/transaction/transaction_event.dart';
+import '../../bloc/transaction/transaction_state.dart';
+import '../../widgets/custom_snacbar.dart';
+import 'widgets/balance_cards.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -32,12 +34,16 @@ class _HomePageState extends State<HomePage> {
         if (state is TransactionExportSuccess) {
           _showExportDialog(context, state.jsonString);
         } else if (state is TransactionImportSuccess) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('${state.countImported} transactions imported successfully')),
+          CustomSnacbar.show(
+            context,
+            isError: false,
+            text: '${state.countImported} transactions imported successfully',
           );
         } else if (state is TransactionError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Error: ${state.errorMessage}')),
+          CustomSnacbar.show(
+            context,
+            isError: false,
+            text: 'Error: ${state.errorMessage}',
           );
         }
       },
@@ -47,12 +53,28 @@ class _HomePageState extends State<HomePage> {
             title: Text('Dashboard', style: Theme.of(context).textTheme.titleLarge),
             actions: [
               IconButton(
-                icon: Icon(PhosphorIconsRegular.upload, size: 24.sp),
+                icon: SvgPicture.asset(
+                    "assets/icons/import.svg",
+                  height: 24.h,
+                  width: 24.w,
+                  colorFilter: const ColorFilter.mode(
+                    AppColors.heading,
+                    BlendMode.srcIn,
+                  ),
+                ),
                 onPressed: () => _showImportDialog(context),
                 tooltip: 'Import JSON',
               ),
               IconButton(
-                icon: Icon(PhosphorIconsRegular.download, size: 24.sp),
+                icon: SvgPicture.asset(
+                  "assets/icons/export.svg",
+                  height: 24.h,
+                  width: 24.w,
+                  colorFilter: const ColorFilter.mode(
+                    AppColors.heading,
+                    BlendMode.srcIn,
+                  ),
+                ),
                 onPressed: () => context.read<TransactionBloc>().add(ExportJsonRequested()),
                 tooltip: 'Export JSON',
               ),
@@ -100,12 +122,14 @@ class _HomePageState extends State<HomePage> {
           FilledButton(
             onPressed: () {
               Clipboard.setData(ClipboardData(text: jsonString));
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('JSON copied to clipboard')),
+              CustomSnacbar.show(
+                context,
+                isError: false,
+                text: 'JSON copied to clipboard',
               );
               Navigator.of(context).pop();
             },
-            child: const Text('Copy to Clipboard'),
+            child:  const Text('Copy to Clipboard'),
           ),
         ],
       ),

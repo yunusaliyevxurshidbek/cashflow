@@ -1,25 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:income_expense_tracker/features/transactions/domain/entities/transaction_entity.dart';
-import 'package:income_expense_tracker/features/transactions/presentation/bloc/transaction/transaction_bloc.dart';
-import 'package:income_expense_tracker/features/transactions/presentation/bloc/transaction/transaction_event.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:income_expense_tracker/core/constants/app_colors.dart';
 import 'package:income_expense_tracker/core/constants/app_spacing.dart';
 import 'package:income_expense_tracker/core/constants/app_typography.dart';
+import 'package:income_expense_tracker/features/transactions/domain/entities/transaction_entity.dart';
+import 'package:income_expense_tracker/features/transactions/presentation/bloc/transaction/transaction_bloc.dart';
+import 'package:income_expense_tracker/features/transactions/presentation/bloc/transaction/transaction_event.dart';
+import 'package:income_expense_tracker/features/transactions/presentation/widgets/custom_snacbar.dart';
 import 'package:uuid/uuid.dart';
 
-/// Reusable Transaction Form used across Add tab and standalone page
-class TransactionForm extends StatefulWidget {
+class AddPageWidget extends StatefulWidget {
   final TransactionEntity? initial;
   final bool popOnSubmit;
-  const TransactionForm({super.key, this.initial, this.popOnSubmit = true});
+  const AddPageWidget({super.key, this.initial, this.popOnSubmit = true});
 
   @override
-  State<TransactionForm> createState() => _TransactionFormState();
+  State<AddPageWidget> createState() => _AddPageWidgetState();
 }
 
-class _TransactionFormState extends State<TransactionForm> {
+class _AddPageWidgetState extends State<AddPageWidget> {
   final _formKey = GlobalKey<FormState>();
   TransactionType _type = TransactionType.expense;
   final _categoryController = TextEditingController();
@@ -60,8 +61,9 @@ class _TransactionFormState extends State<TransactionForm> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Type Selection
+          // expense_income_container:
           Container(
+            width: double.infinity,
             padding: AppSpacing.cardPaddingSmall,
             decoration: BoxDecoration(
               color: AppColors.surfaceVariant,
@@ -92,16 +94,16 @@ class _TransactionFormState extends State<TransactionForm> {
                   selected: {_type},
                   onSelectionChanged: (s) => setState(() => _type = s.first),
                   style: ButtonStyle(
-                    backgroundColor: MaterialStateProperty.resolveWith((states) {
-                      if (states.contains(MaterialState.selected)) {
+                    backgroundColor: WidgetStateProperty.resolveWith((states) {
+                      if (states.contains(WidgetState.selected)) {
                         return _type == TransactionType.income
-                            ? AppColors.income.withOpacity(0.2)
-                            : AppColors.expense.withOpacity(0.2);
+                            ? AppColors.income.withAlpha(52)
+                            : AppColors.expense.withAlpha(52);
                       }
                       return AppColors.surface;
                     }),
-                    foregroundColor: MaterialStateProperty.resolveWith((states) {
-                      if (states.contains(MaterialState.selected)) {
+                    foregroundColor: WidgetStateProperty.resolveWith((states) {
+                      if (states.contains(WidgetState.selected)) {
                         return _type == TransactionType.income
                             ? AppColors.income
                             : AppColors.expense;
@@ -115,11 +117,11 @@ class _TransactionFormState extends State<TransactionForm> {
           ),
           AppSpacing.verticalLg,
 
-          // Category Field
+          // category_field:
           TextFormField(
             controller: _categoryController,
-            decoration: InputDecoration(
-              prefixIcon: Icon(Icons.category_outlined, color: AppColors.primary),
+            decoration: const InputDecoration(
+              prefixIcon: Icon(Icons.category_outlined, color: AppColors.mutedText),
               labelText: 'Category',
               hintText: 'e.g., Food, Salary, Transport',
             ),
@@ -128,11 +130,11 @@ class _TransactionFormState extends State<TransactionForm> {
           ),
           AppSpacing.verticalMd,
 
-          // Amount Field
+          // amount_field:
           TextFormField(
             controller: _amountController,
-            decoration: InputDecoration(
-              prefixIcon: Icon(Icons.attach_money, color: AppColors.primary),
+            decoration: const InputDecoration(
+              prefixIcon: Icon(Icons.attach_money, color: AppColors.mutedText),
               labelText: 'Amount',
               hintText: '0.00',
             ),
@@ -145,7 +147,7 @@ class _TransactionFormState extends State<TransactionForm> {
           ),
           AppSpacing.verticalMd,
 
-          // Date Picker
+          // date_picker:
           InkWell(
             onTap: () async {
               final now = DateTime.now();
@@ -153,11 +155,11 @@ class _TransactionFormState extends State<TransactionForm> {
                 context: context,
                 initialDate: _date ?? now,
                 firstDate: DateTime(now.year - 5),
-                lastDate: DateTime(now.year + 5),
+                lastDate: now,
                 builder: (context, child) {
                   return Theme(
                     data: Theme.of(context).copyWith(
-                      colorScheme: ColorScheme.dark(
+                      colorScheme: const ColorScheme.dark(
                         primary: AppColors.primary,
                         surface: AppColors.surface,
                         onSurface: AppColors.secondaryText,
@@ -167,6 +169,7 @@ class _TransactionFormState extends State<TransactionForm> {
                   );
                 },
               );
+
               if (picked != null) setState(() => _date = picked);
             },
             child: Container(
@@ -177,40 +180,49 @@ class _TransactionFormState extends State<TransactionForm> {
               ),
               child: Row(
                 children: [
-                  Icon(Icons.date_range, color: AppColors.primary),
+                  SvgPicture.asset(
+                      "assets/icons/calendar.svg",
+                    colorFilter: const ColorFilter.mode(
+                      AppColors.mutedText,
+                      BlendMode.srcIn,
+                    ),
+                  ),
                   AppSpacing.horizontalMd,
                   Expanded(
                     child: Text(
                       _date == null
                           ? 'Select date'
-                          : '${_date!.day}/${_date!.month}/${_date!.year}',
+                          : '${_date!.day}-${_date!.month}-${_date!.year}',
                       style: TextStyle(
-                        color: _date == null ? AppColors.mutedText : AppColors.secondaryText,
+                        color: _date == null
+                            ? AppColors.mutedText
+                            : AppColors.secondaryText,
                         fontSize: 16.sp,
                       ),
                     ),
                   ),
-                  Icon(Icons.keyboard_arrow_down, color: AppColors.mutedText),
+                  const Icon(Icons.keyboard_arrow_down, color: AppColors.mutedText),
                 ],
               ),
             ),
           ),
+
           AppSpacing.verticalMd,
 
-          // Note Field
+          // note_field:
           TextFormField(
             controller: _noteController,
-            decoration: InputDecoration(
-              prefixIcon: Icon(Icons.notes, color: AppColors.primary),
-              labelText: 'Note (optional)',
+            decoration: const InputDecoration(
+              labelText: 'Note (optional) ...',
               hintText: 'Add a note for this transaction',
+              alignLabelWithHint: true,
             ),
             maxLines: 3,
             textCapitalization: TextCapitalization.sentences,
           ),
           AppSpacing.verticalXxl,
 
-          // Submit Button
+          // submit_button:
           _GradientButton(text: _id == null ? 'Add Transaction' : 'Update Transaction', onPressed: _valid ? _submit : null),
         ],
       ),
@@ -230,7 +242,11 @@ class _TransactionFormState extends State<TransactionForm> {
     final bloc = context.read<TransactionBloc>();
     if (_id == null) {
       bloc.add(AddTransactionRequested(entity));
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Income/Expense added successfully ✅')));
+      CustomSnacbar.show(
+        context,
+        isError: false,
+        text: 'Income/Expense added successfully'
+      );
       if (!widget.popOnSubmit) {
         _categoryController.clear();
         _amountController.clear();
@@ -241,7 +257,11 @@ class _TransactionFormState extends State<TransactionForm> {
       }
     } else {
       bloc.add(UpdateTransactionRequested(entity));
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Transaction updated successfully')));
+      CustomSnacbar.show(
+          context,
+          isError: false,
+          text: 'Transaction updated successfully'
+      );
     }
     if (widget.popOnSubmit && Navigator.canPop(context)) {
       Navigator.pop(context);
@@ -267,7 +287,7 @@ class _GradientButton extends StatelessWidget {
           gradient: AppColors.primaryGradient,
           boxShadow: [
             BoxShadow(
-              color: AppColors.primary.withOpacity(0.3),
+              color: AppColors.primary.withAlpha(77),
               blurRadius: AppSpacing.elevationXl,
               offset: const Offset(0, 4),
             ),

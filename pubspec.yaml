@@ -12,19 +12,19 @@ dependencies:
   flutter_localizations:
     sdk: flutter
 
-  # State management
+  # state_management:
   flutter_bloc: ^8.1.4
   equatable: ^2.0.5
 
-  # Database
+  # database:
   sqflite: ^2.3.3
   path_provider: ^2.1.3
   path: ^1.9.0
 
-  # Charts
+  # charts:
   fl_chart: ^0.69.0
 
-  # Utils
+  # utils:
   intl: 0.20.2
   uuid: ^4.4.0
   google_fonts: ^6.2.1
@@ -34,6 +34,8 @@ dependencies:
   animated_notch_bottom_bar: ^1.0.3
   phosphor_flutter: ^2.0.1
   flutter_launcher_icons: ^0.14.4
+  flutter_svg: ^2.2.1
+  get_it: ^8.2.0
 
 dev_dependencies:
   flutter_test:
@@ -54,3 +56,4 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/icons/

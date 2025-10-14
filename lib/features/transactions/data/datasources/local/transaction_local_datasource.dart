@@ -1,10 +1,10 @@
 import 'dart:convert';
-import 'package:sqflite/sqflite.dart' hide DatabaseException;
 import 'package:path/path.dart' as p;
+import 'package:sqflite/sqflite.dart' hide DatabaseException;
 import 'package:uuid/uuid.dart';
+import '../../../../../../core/errors/exceptions.dart';
 import '../../../domain/entities/transaction_entity.dart';
 import '../../models/transaction_model.dart';
-import '../../../../../../core/errors/exceptions.dart';
 
 class TransactionLocalDataSource {
   final String dbPath;
@@ -165,11 +165,9 @@ class TransactionLocalDataSource {
       int count = 0;
       for (final item in parsed) {
         if (item is! Map<String, dynamic>) continue;
-        // Basic validation
         if (!item.containsKey('id') || !item.containsKey('type') || !item.containsKey('category') || !item.containsKey('amount') || !item.containsKey('date')) {
           continue;
         }
-        // Merge by id; keep latest by date if exists
         final incoming = TransactionModel.fromJson(item);
         final existing = await db.query(_table, where: 'id = ?', whereArgs: [incoming.id]);
         if (existing.isEmpty) {

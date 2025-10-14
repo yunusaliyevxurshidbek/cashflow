@@ -1,29 +1,28 @@
 import 'package:flutter/material.dart';
 import 'core/constants/app_theme.dart';
 import 'core/constants/app_typography.dart';
-import 'features/transactions/presentation/pages/analysis_page.dart';
-import 'features/transactions/presentation/pages/shell_page.dart';
-import 'features/transactions/presentation/pages/transaction_form_page.dart';
-import 'features/transactions/presentation/pages/transactions_page.dart';
+import 'features/transactions/presentation/pages/add_transaction_page/add_page.dart';
+import 'features/transactions/presentation/pages/analysis_page/analysis_page.dart';
+import 'features/transactions/presentation/pages/main_page.dart';
+import 'features/transactions/presentation/pages/transaction_page/transactions_page.dart';
 
 class IncomeExpenseApp extends StatelessWidget {
   const IncomeExpenseApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final _light = AppTheme.light.copyWith(textTheme: AppTypography.textTheme(context));
-    final _dark = AppTheme.dark.copyWith(textTheme: AppTypography.textTheme(context));
+    final light = AppTheme.light.copyWith(textTheme: AppTypography.textTheme(context));
+    final dark = AppTheme.dark.copyWith(textTheme: AppTypography.textTheme(context));
     return MaterialApp(
-      title: 'Income & Expense Tracker',
       debugShowCheckedModeBanner: false,
       themeMode: ThemeMode.system,
-      theme: _light,
-      darkTheme: _dark,
+      theme: light,
+      darkTheme: dark,
       initialRoute: '/',
       routes: {
-        '/': (_) => const ShellPage(),
+        '/': (_) => const MainPage(),
         '/transactions': (_) => const TransactionsPage(),
-        '/form': (_) => const TransactionFormPage(),
+        '/form': (_) => const AddPage(),
         '/analysis': (_) => const AnalysisPage(),
       },
     );

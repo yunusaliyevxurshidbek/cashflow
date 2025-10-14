@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../domain/entities/transaction_entity.dart';
-import '../bloc/filter/filter_bloc.dart';
-import '../bloc/filter/filter_event.dart';
-import '../bloc/filter/filter_state.dart';
-import '../bloc/transaction/transaction_bloc.dart';
-import '../bloc/transaction/transaction_event.dart';
-import '../bloc/transaction/transaction_state.dart';
-import '../widgets/empty_view.dart';
-import '../widgets/error_view.dart';
-import '../widgets/filter_bar_modern.dart';
-import '../widgets/loading_view.dart';
-import '../widgets/transaction_card.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:income_expense_tracker/features/transactions/presentation/widgets/custom_snacbar.dart';
+import '../../../../../core/constants/app_colors.dart';
+import '../../../domain/entities/transaction_entity.dart';
+import '../../bloc/filter/filter_bloc.dart';
+import '../../bloc/filter/filter_event.dart';
+import '../../bloc/filter/filter_state.dart';
+import '../../bloc/transaction/transaction_bloc.dart';
+import '../../bloc/transaction/transaction_event.dart';
+import '../../bloc/transaction/transaction_state.dart';
+import 'widgets/empty_view.dart';
+import '../../widgets/error_view.dart';
+import 'widgets/filter_bar_modern.dart';
+import 'widgets/loading_view.dart';
+import 'widgets/transaction_card.dart';
 
 class TransactionsPage extends StatefulWidget {
   const TransactionsPage({super.key});
@@ -29,11 +32,6 @@ class _TransactionsPageState extends State<TransactionsPage> {
         title: Text('Transactions', style: Theme.of(context).textTheme.titleLarge),
         actions: [
           IconButton(
-            tooltip: 'Export JSON',
-            onPressed: () => context.read<TransactionBloc>().add(ExportJsonRequested()),
-            icon: const Icon(Icons.file_upload_outlined),
-          ),
-          IconButton(
             tooltip: 'Import JSON',
             onPressed: () async {
               final controller = TextEditingController();
@@ -49,11 +47,32 @@ class _TransactionsPageState extends State<TransactionsPage> {
                 ),
               );
               if (json != null && json.trim().isNotEmpty) {
-                // ignore: use_build_context_synchronously
                 context.read<TransactionBloc>().add(ImportJsonRequested(json));
               }
             },
-            icon: const Icon(Icons.file_download_outlined),
+            icon: SvgPicture.asset(
+              "assets/icons/import.svg",
+              height: 24.h,
+              width: 24.w,
+              colorFilter: const ColorFilter.mode(
+                AppColors.heading,
+                BlendMode.srcIn,
+              ),
+            ),
+          ),
+
+          IconButton(
+            tooltip: 'Export JSON',
+            onPressed: () => context.read<TransactionBloc>().add(ExportJsonRequested()),
+            icon: SvgPicture.asset(
+              "assets/icons/export.svg",
+              height: 24.h,
+              width: 24.w,
+              colorFilter: const ColorFilter.mode(
+                AppColors.heading,
+                BlendMode.srcIn,
+              ),
+            ),
           ),
         ],
       ),
@@ -91,14 +110,13 @@ class _TransactionsPageState extends State<TransactionsPage> {
                 } else if (state is TransactionError) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.errorMessage)));
                 } else if (state is TransactionExportSuccess) {
-                  // Offer copy to clipboard
                   try {
-                    // late import to avoid platform issues on web
-                    // ignore: avoid_dynamic_calls
-                    // ignore: unnecessary_import
                   } catch (_) {}
-                  // ignore: use_build_context_synchronously
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Export completed — JSON ready')));
+                  CustomSnacbar.show(
+                    context,
+                    isError: false,
+                    text: 'Export completed — JSON ready'
+                  );
                   await showDialog(
                     context: context,
                     builder: (_) => AlertDialog(
@@ -163,7 +181,6 @@ class _TransactionsPageState extends State<TransactionsPage> {
       ),
     );
     if (ok == true) {
-      // ignore: use_build_context_synchronously
       context.read<TransactionBloc>().add(DeleteTransactionRequested(t.id));
     }
   }

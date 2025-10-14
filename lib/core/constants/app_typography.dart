@@ -13,7 +13,6 @@ class AppTypography {
     final mutedColor = isDark ? AppColors.mutedText : AppColors.mutedText;
 
     return TextTheme(
-      // Headlines - Bold and prominent
       headlineLarge: GoogleFonts.inter(
         fontSize: 32.sp,
         fontWeight: FontWeight.w800,
@@ -32,7 +31,6 @@ class AppTypography {
         color: primaryColor,
       ),
 
-      // Titles - Semi-bold for sections
       titleLarge: GoogleFonts.inter(
         fontSize: 22.sp,
         fontWeight: FontWeight.w600,
@@ -49,7 +47,6 @@ class AppTypography {
         color: secondaryColor,
       ),
 
-      // Body text - Regular weight
       bodyLarge: GoogleFonts.inter(
         fontSize: 16.sp,
         fontWeight: FontWeight.w400,
@@ -69,7 +66,6 @@ class AppTypography {
         height: 1.3,
       ),
 
-      // Labels - Medium weight for buttons/labels
       labelLarge: GoogleFonts.inter(
         fontSize: 14.sp,
         fontWeight: FontWeight.w500,
@@ -89,7 +85,6 @@ class AppTypography {
         letterSpacing: 0.5,
       ),
 
-      // Display styles for special cases
       displayLarge: GoogleFonts.inter(
         fontSize: 57.sp,
         fontWeight: FontWeight.w400,
@@ -111,7 +106,6 @@ class AppTypography {
     );
   }
 
-  // Custom text styles for specific use cases
   static TextStyle amountText(BuildContext context, double amount, {bool isIncome = true}) {
     final color = isIncome ? AppColors.income : AppColors.expense;
     return GoogleFonts.jetBrainsMono(

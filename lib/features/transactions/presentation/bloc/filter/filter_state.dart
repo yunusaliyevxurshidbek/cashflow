@@ -1,9 +1,8 @@
 import 'package:equatable/equatable.dart';
-
 import '../../../domain/entities/transaction_entity.dart';
 
 class FilterState extends Equatable {
-  final TransactionType? type; // null = all
+  final TransactionType? type;
   final DateTime? dateStart;
   final DateTime? dateEnd;
   final String? category;

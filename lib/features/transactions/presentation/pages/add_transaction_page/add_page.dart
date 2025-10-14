@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:income_expense_tracker/features/transactions/presentation/widgets/transaction_form.dart';
-import '../../domain/entities/transaction_entity.dart';
+import 'package:income_expense_tracker/features/transactions/presentation/pages/add_transaction_page/widgets/add_page_widget.dart';
+import '../../../domain/entities/transaction_entity.dart';
 
-class TransactionFormPage extends StatefulWidget {
-  const TransactionFormPage({super.key});
+class AddPage extends StatefulWidget {
+  const AddPage({super.key});
 
   @override
-  State<TransactionFormPage> createState() => _TransactionFormPageState();
+  State<AddPage> createState() => _AddPageState();
 }
 
-class _TransactionFormPageState extends State<TransactionFormPage> {
+class _AddPageState extends State<AddPage> {
   final _formKey = GlobalKey<FormState>();
   TransactionType _type = TransactionType.expense;
   final _categoryController = TextEditingController();
   final _amountController = TextEditingController();
   DateTime? _date;
   final _noteController = TextEditingController();
-  String? _id; // null => add
+  String? _id;
 
   @override
   void didChangeDependencies() {
@@ -46,10 +46,13 @@ class _TransactionFormPageState extends State<TransactionFormPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(_id == null ? 'Add Transaction' : 'Edit Transaction')),
+      appBar: AppBar(
+          title: Text(_id == null ? 'Add Transaction' : 'Edit Transaction',),
+        centerTitle: true,
+      ),
       body: SingleChildScrollView(
         padding: EdgeInsets.all(16.w), 
-        child: TransactionForm(
+        child: AddPageWidget(
           initial: _id == null ? null : _buildEntity(), 
           popOnSubmit: true,
           ),

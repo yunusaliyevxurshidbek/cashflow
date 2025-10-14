@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../core/utils/formatters.dart';
-import '../../../../core/constants/app_colors.dart';
-import '../../../../core/constants/app_spacing.dart';
-import '../../../../core/constants/app_typography.dart';
+import '../../../../../../core/utils/formatters.dart';
+import '../../../../../../core/constants/app_colors.dart';
+import '../../../../../../core/constants/app_spacing.dart';
+import '../../../../../../core/constants/app_typography.dart';
 
 class BalanceCards extends StatelessWidget {
   final double totalIncome;
@@ -77,7 +77,7 @@ class _CardTile extends StatelessWidget {
         borderRadius: BorderRadius.circular(AppSpacing.radiusLg),
         boxShadow: [
           BoxShadow(
-            color: color.withOpacity(0.3),
+            color: color.withAlpha(77),
             blurRadius: 12,
             offset: const Offset(0, 6),
           ),
@@ -88,13 +88,13 @@ class _CardTile extends StatelessWidget {
         children: [
           Row(
             children: [
-              Icon(icon, color: Colors.white.withOpacity(0.9), size: AppSpacing.iconMd),
+              Icon(icon, color: Colors.white.withAlpha(230), size: AppSpacing.iconMd),
               AppSpacing.horizontalSm,
               Expanded(
                 child: Text(
                   title,
                   style: AppTypography.cardSubtitle(context).copyWith(
-                    color: Colors.white.withOpacity(0.9),
+                    color: Colors.white.withAlpha(230),
                     fontSize: 12.sp,
                   ),
                 ),

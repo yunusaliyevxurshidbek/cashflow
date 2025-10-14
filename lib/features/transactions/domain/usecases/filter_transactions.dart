@@ -16,7 +16,7 @@ class FilterTransactions implements UseCase<List<TransactionEntity>, FilterParam
 }
 
 class FilterParams {
-  final TransactionType? type; // null means all
+  final TransactionType? type;
   final DateTime? start;
   final DateTime? end;
   final String? category;

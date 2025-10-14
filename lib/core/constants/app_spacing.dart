@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 class AppSpacing {
   AppSpacing._();
 
-  // Base spacing units
   static double get xs => 4.w;
   static double get sm => 8.w;
   static double get md => 12.w;
@@ -13,14 +12,10 @@ class AppSpacing {
   static double get xxl => 32.w;
   static double get xxxl => 48.w;
 
-  // Page padding
   static EdgeInsets get pagePadding => EdgeInsets.symmetric(horizontal: lg, vertical: md);
 
-  // Card padding
   static EdgeInsets get cardPadding => EdgeInsets.all(lg);
   static EdgeInsets get cardPaddingSmall => EdgeInsets.all(md);
-
-  // Element spacing
   static SizedBox get verticalXs => SizedBox(height: xs);
   static SizedBox get verticalSm => SizedBox(height: sm);
   static SizedBox get verticalMd => SizedBox(height: md);
@@ -35,7 +30,6 @@ class AppSpacing {
   static SizedBox get horizontalXl => SizedBox(width: xl);
   static SizedBox get horizontalXxl => SizedBox(width: xxl);
 
-  // Border radius
   static double get radiusXs => 4.r;
   static double get radiusSm => 8.r;
   static double get radiusMd => 12.r;
@@ -43,7 +37,6 @@ class AppSpacing {
   static double get radiusXl => 24.r;
   static double get radiusXxl => 32.r;
 
-  // Icon sizes
   static double get iconXs => 12.sp;
   static double get iconSm => 16.sp;
   static double get iconMd => 20.sp;
@@ -51,7 +44,6 @@ class AppSpacing {
   static double get iconXl => 32.sp;
   static double get iconXxl => 48.sp;
 
-  // Elevation
   static double get elevationSm => 2;
   static double get elevationMd => 4;
   static double get elevationLg => 8;

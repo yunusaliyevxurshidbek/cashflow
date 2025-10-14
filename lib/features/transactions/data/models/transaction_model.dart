@@ -1,16 +1,14 @@
 import 'package:json_annotation/json_annotation.dart';
-
 import '../../domain/entities/transaction_entity.dart';
-
 part 'transaction_model.g.dart';
 
 @JsonSerializable()
 class TransactionModel {
   final String id;
-  final String type; // 'income' | 'expense'
+  final String type;
   final String category;
   final double amount;
-  final int date; // epoch millis
+  final int date;
   final String? note;
 
   const TransactionModel({
