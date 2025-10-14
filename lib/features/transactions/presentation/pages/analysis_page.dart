@@ -21,7 +21,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Analysis'),
+        title: Text('Analysis', style: Theme.of(context).textTheme.titleLarge),
         actions: [
           DropdownButtonHideUnderline(
             child: DropdownButton<int>(
@@ -39,20 +39,25 @@ class _AnalysisPageState extends State<AnalysisPage> {
         padding: EdgeInsets.all(16.w),
         child: BlocBuilder<TransactionBloc, TransactionState>(
           builder: (context, state) {
-            if (state is TransactionLoaded) {
-              final monthlyIncome = List.filled(12, 0.0);
-              final monthlyExpense = List.filled(12, 0.0);
-              for (final t in state.items) {
-                if (t.date.year != _year) continue;
-                final idx = t.date.month - 1;
-                if (t.type == TransactionType.income) monthlyIncome[idx] += t.amount;
-                if (t.type == TransactionType.expense) monthlyExpense[idx] += t.amount;
-              }
-              return _buildBarChart(monthlyIncome, monthlyExpense);
-            }
-            if (state is TransactionLoading) return const Center(child: CircularProgressIndicator());
-            if (state is TransactionEmpty) return const Center(child: Text('No data for chart'));
-            return const SizedBox.shrink();
+            return AnimatedSwitcher(
+              duration: const Duration(milliseconds: 250),
+              child: () {
+                if (state is TransactionLoaded) {
+                  final monthlyIncome = List.filled(12, 0.0);
+                  final monthlyExpense = List.filled(12, 0.0);
+                  for (final t in state.items) {
+                    if (t.date.year != _year) continue;
+                    final idx = t.date.month - 1;
+                    if (t.type == TransactionType.income) monthlyIncome[idx] += t.amount;
+                    if (t.type == TransactionType.expense) monthlyExpense[idx] += t.amount;
+                  }
+                  return _buildBarChart(monthlyIncome, monthlyExpense);
+                }
+                if (state is TransactionLoading) return const Center(child: CircularProgressIndicator());
+                if (state is TransactionEmpty) return const Center(child: Text('No data for chart'));
+                return const SizedBox.shrink();
+              }(),
+            );
           },
         ),
       ),
@@ -73,7 +78,7 @@ class _AnalysisPageState extends State<AnalysisPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text('Monthly Income vs Expense'),
+        Text('Monthly Income vs Expense', style: Theme.of(context).textTheme.titleLarge),
         SizedBox(height: 16.h),
         Expanded(
           child: BarChart(
@@ -125,4 +130,3 @@ class _Legend extends StatelessWidget {
     );
   }
 }
-

@@ -66,7 +66,7 @@ class _FilterBarState extends State<FilterBar> {
                   _end = r.end;
                 });
               },
-              icon: const Icon(Icons.date_range),
+              icon: Icon(Icons.date_range, size: 18.sp),
               label: Text(_start == null ? 'Date range' : '${_start!.day}/${_start!.month} - ${_end!.day}/${_end!.month}'),
             ),
             SizedBox(
@@ -94,4 +94,3 @@ class _FilterBarState extends State<FilterBar> {
     );
   }
 }
-

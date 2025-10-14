@@ -26,7 +26,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Transactions'),
+        title: Text('Transactions', style: Theme.of(context).textTheme.titleLarge),
         actions: [
           IconButton(
             tooltip: 'Export JSON',
@@ -54,11 +54,6 @@ class _TransactionsPageState extends State<TransactionsPage> {
               }
             },
             icon: const Icon(Icons.file_download_outlined),
-          ),
-          IconButton(
-            tooltip: 'Add',
-            onPressed: () => Navigator.pushNamed(context, '/form'),
-            icon: const Icon(Icons.add),
           ),
         ],
       ),
@@ -111,26 +106,36 @@ class _TransactionsPageState extends State<TransactionsPage> {
                 }
               },
               builder: (context, state) {
-                if (state is TransactionLoading) return const LoadingView();
-                if (state is TransactionEmpty) return const EmptyView();
-                if (state is TransactionError) return ErrorView(message: state.errorMessage);
-                if (state is TransactionLoaded) {
-                  final items = state.items;
-                  return ListView.separated(
-                    padding: EdgeInsets.all(12.w),
-                    itemCount: items.length,
-                    separatorBuilder: (_, __) => SizedBox(height: 8.h),
-                    itemBuilder: (context, index) {
-                      final t = items[index];
-                      return TransactionCard(
-                        entity: t,
-                        onEdit: () => Navigator.pushNamed(context, '/form', arguments: t),
-                        onDelete: () => _confirmDelete(context, t),
+                return AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 250),
+                  child: () {
+                    if (state is TransactionLoading) return const LoadingView();
+                    if (state is TransactionEmpty) return const EmptyView();
+                    if (state is TransactionError) return ErrorView(message: state.errorMessage);
+                    if (state is TransactionLoaded) {
+                      final items = state.items;
+                      return ListView.separated(
+                        key: const ValueKey('list'),
+                        padding: EdgeInsets.all(12.w),
+                        itemCount: items.length,
+                        separatorBuilder: (_, __) => SizedBox(height: 8.h),
+                        itemBuilder: (context, index) {
+                          final t = items[index];
+                          return AnimatedOpacity(
+                            duration: const Duration(milliseconds: 200),
+                            opacity: 1.0,
+                            child: TransactionCard(
+                              entity: t,
+                              onEdit: () => Navigator.pushNamed(context, '/form', arguments: t),
+                              onDelete: () => _confirmDelete(context, t),
+                            ),
+                          );
+                        },
                       );
-                    },
-                  );
-                }
-                return const SizedBox.shrink();
+                    }
+                    return const SizedBox.shrink();
+                  }(),
+                );
               },
             ),
           ),

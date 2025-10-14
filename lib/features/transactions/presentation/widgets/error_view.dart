@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class ErrorView extends StatelessWidget {
   final String message;
@@ -10,14 +11,13 @@ class ErrorView extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(Icons.error_outline, size: 48),
-          const SizedBox(height: 8),
+          Icon(Icons.error_outline, size: 48.sp),
+          SizedBox(height: 8.h),
           Text('Something went wrong', style: Theme.of(context).textTheme.titleMedium),
-          const SizedBox(height: 4),
+          SizedBox(height: 4.h),
           Text(message, textAlign: TextAlign.center),
         ],
       ),
     );
   }
 }
-

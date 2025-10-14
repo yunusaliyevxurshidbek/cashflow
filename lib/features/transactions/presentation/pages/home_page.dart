@@ -24,19 +24,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Dashboard'),
-        actions: [
-          IconButton(
-            tooltip: 'Transactions',
-            icon: const Icon(Icons.list_alt),
-            onPressed: () => Navigator.pushNamed(context, '/transactions'),
-          ),
-          IconButton(
-            tooltip: 'Analysis',
-            icon: const Icon(Icons.insights),
-            onPressed: () => Navigator.pushNamed(context, '/analysis'),
-          ),
-        ],
+        title: Text('Dashboard', style: Theme.of(context).textTheme.titleLarge),
       ),
       body: Padding(
         padding: EdgeInsets.all(16.w),
@@ -59,12 +47,7 @@ class _HomePageState extends State<HomePage> {
           },
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => Navigator.pushNamed(context, '/form'),
-        label: const Text('Add'),
-        icon: const Icon(Icons.add),
-      ),
+      // FAB is redundant with bottom nav Add tab; keeping page minimal.
     );
   }
 }
-

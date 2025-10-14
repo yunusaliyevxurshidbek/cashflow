@@ -12,7 +12,8 @@ A production-ready, clean architecture Flutter app to track personal income and 
 - Analysis charts (monthly bars)
 - Import/Export JSON (merge on id; keep latest by date)
 - Material 3 design, light/dark, Google Fonts
-- Responsive with `flutter_screenutil`
+- Responsive with `flutter_screenutil` for all sizes (text, paddings, icons)
+- Animated notch bottom navigation (Transactions / Analysis / Add)
 - Error/empty/loading views and Snackbar notifications
 
 ## Tech Stack
@@ -74,6 +75,13 @@ lib/
   main.dart
 ```
 
+## Navigation
+- The app uses `animated_notch_bottom_bar` with three primary tabs:
+  - Transactions
+  - Analysis
+  - Add (embedded transaction form)
+  You can still access the edit form via the list item actions.
+
 ## Linting
 Uses `flutter_lints` via `analysis_options.yaml`.
 
@@ -95,4 +103,3 @@ flutter test
 ```
 flutter pub run build_runner build --delete-conflicting-outputs
 ```
-

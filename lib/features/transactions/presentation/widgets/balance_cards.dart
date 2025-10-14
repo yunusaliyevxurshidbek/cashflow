@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../../core/utils/formatters.dart';
+import '../../../../core/constants/app_colors.dart';
 
 class BalanceCards extends StatelessWidget {
   final double totalIncome;
@@ -15,9 +16,9 @@ class BalanceCards extends StatelessWidget {
       children: [
         Row(
           children: [
-            Expanded(child: _CardTile(title: 'Total Income', value: '+${formatAmount(totalIncome)}', color: Colors.green)),
+            Expanded(child: _CardTile(title: 'Total Income', value: '+${formatAmount(totalIncome)}', color: AppColors.income)),
             SizedBox(width: 12.w),
-            Expanded(child: _CardTile(title: 'Total Expense', value: '-${formatAmount(totalExpense)}', color: Colors.red)),
+            Expanded(child: _CardTile(title: 'Total Expense', value: '-${formatAmount(totalExpense)}', color: AppColors.expense)),
           ],
         ),
         SizedBox(height: 12.h),
@@ -48,4 +49,3 @@ class _CardTile extends StatelessWidget {
     );
   }
 }
-

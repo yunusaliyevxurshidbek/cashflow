@@ -1,34 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'features/transactions/presentation/pages/analysis_page.dart';
-import 'features/transactions/presentation/pages/home_page.dart';
+
+import 'core/constants/app_theme.dart';
+import 'core/constants/app_typography.dart';
+import 'features/transactions/presentation/pages/shell_page.dart';
 import 'features/transactions/presentation/pages/transaction_form_page.dart';
 import 'features/transactions/presentation/pages/transactions_page.dart';
+import 'features/transactions/presentation/pages/analysis_page.dart';
 
 class IncomeExpenseApp extends StatelessWidget {
   const IncomeExpenseApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final baseTextTheme = GoogleFonts.interTextTheme(Theme.of(context).textTheme);
+    final _light = AppTheme.light.copyWith(textTheme: AppTypography.textTheme(context));
+    final _dark = AppTheme.dark.copyWith(textTheme: AppTypography.textTheme(context));
     return MaterialApp(
       title: 'Income & Expense Tracker',
-      themeMode: ThemeMode.system,
-      theme: ThemeData(
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal),
-        textTheme: baseTextTheme,
-      ),
-      darkTheme: ThemeData(
-        brightness: Brightness.dark,
-        useMaterial3: true,
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal, brightness: Brightness.dark),
-        textTheme: baseTextTheme,
-      ),
       debugShowCheckedModeBanner: false,
+      themeMode: ThemeMode.system,
+      theme: _light,
+      darkTheme: _dark,
       initialRoute: '/',
       routes: {
-        '/': (_) => const HomePage(),
+        '/': (_) => const ShellPage(),
         '/transactions': (_) => const TransactionsPage(),
         '/form': (_) => const TransactionFormPage(),
         '/analysis': (_) => const AnalysisPage(),
@@ -36,4 +30,3 @@ class IncomeExpenseApp extends StatelessWidget {
     );
   }
 }
-

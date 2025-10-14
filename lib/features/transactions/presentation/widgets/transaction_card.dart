@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:income_expense_tracker/core/constants/app_colors.dart';
 import '../../../../core/utils/formatters.dart';
 import '../../domain/entities/transaction_entity.dart';
 
@@ -12,7 +13,7 @@ class TransactionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isIncome = entity.type == TransactionType.income;
-    final color = isIncome ? Colors.green : Colors.red;
+    final color = isIncome ? AppColors.income : AppColors.expense;
     final prefix = isIncome ? '+' : '-';
     return Card(
       elevation: 1,
@@ -20,7 +21,7 @@ class TransactionCard extends StatelessWidget {
         padding: EdgeInsets.all(12.w),
         child: Row(
           children: [
-            CircleAvatar(backgroundColor: color.withOpacity(0.1), child: Icon(isIncome ? Icons.south_west : Icons.north_east, color: color)),
+            CircleAvatar(backgroundColor: color.withOpacity(0.1), child: Icon(isIncome ? Icons.south_west : Icons.north_east, color: color, size: 18.sp)),
             SizedBox(width: 12.w),
             Expanded(
               child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -36,7 +37,7 @@ class TransactionCard extends StatelessWidget {
                     Text(formatDate(entity.date), style: Theme.of(context).textTheme.bodySmall),
                     if (entity.note != null && entity.note!.isNotEmpty) ...[
                       SizedBox(width: 8.w),
-                      const Icon(Icons.notes, size: 14),
+                      Icon(Icons.notes, size: 14.sp),
                       SizedBox(width: 4.w),
                       Expanded(child: Text(entity.note!, style: Theme.of(context).textTheme.bodySmall)),
                     ]
@@ -45,12 +46,11 @@ class TransactionCard extends StatelessWidget {
               ]),
             ),
             SizedBox(width: 8.w),
-            IconButton(tooltip: 'Edit', onPressed: onEdit, icon: const Icon(Icons.edit)),
-            IconButton(tooltip: 'Delete', onPressed: onDelete, icon: const Icon(Icons.delete_outline)),
+            IconButton(tooltip: 'Edit', onPressed: onEdit, icon: Icon(Icons.edit, size: 20.sp)),
+            IconButton(tooltip: 'Delete', onPressed: onDelete, icon: Icon(Icons.delete_outline, size: 20.sp)),
           ],
         ),
       ),
     );
   }
 }
-
