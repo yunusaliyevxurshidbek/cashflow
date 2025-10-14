@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
@@ -47,7 +48,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
                 ),
               );
               if (json != null && json.trim().isNotEmpty) {
-                context.read<TransactionBloc>().add(ImportJsonRequested(json));
+                context.read<TransactionBloc>().add(ImportJsonRequested(json, source: 'transactions'));
               }
             },
             icon: SvgPicture.asset(
@@ -63,7 +64,7 @@ class _TransactionsPageState extends State<TransactionsPage> {
 
           IconButton(
             tooltip: 'Export JSON',
-            onPressed: () => context.read<TransactionBloc>().add(ExportJsonRequested()),
+            onPressed: () => context.read<TransactionBloc>().add(const ExportJsonRequested(source: 'transactions')),
             icon: SvgPicture.asset(
               "assets/icons/export.svg",
               height: 24.h,
@@ -103,25 +104,30 @@ class _TransactionsPageState extends State<TransactionsPage> {
           Expanded(
             child: BlocConsumer<TransactionBloc, TransactionState>(
               listener: (context, state) async {
-                if (state is TransactionImportSuccess) {
+                if (state is TransactionImportSuccess && state.source == 'transactions') {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Imported ${state.countImported} items')));
                 } else if (state is TransactionError) {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.errorMessage)));
-                } else if (state is TransactionExportSuccess) {
-                  try {
-                  } catch (_) {}
-                  CustomSnacbar.show(
-                    context,
-                    isError: false,
-                    text: 'Export completed — JSON ready'
-                  );
-                  await showDialog(
+                } else if (state is TransactionExportSuccess && state.source == 'transactions') {
+                  showDialog(
                     context: context,
                     builder: (_) => AlertDialog(
                       title: const Text('Export JSON'),
                       content: SingleChildScrollView(child: SelectableText(state.jsonString)),
                       actions: [
                         TextButton(onPressed: () => Navigator.pop(context), child: const Text('Close')),
+                        FilledButton(
+                          onPressed: () {
+                            Clipboard.setData(ClipboardData(text: state.jsonString));
+                            CustomSnacbar.show(
+                              context,
+                              isError: false,
+                              text: 'JSON copied to clipboard',
+                            );
+                            Navigator.pop(context);
+                          },
+                          child: const Text('Copy to Clipboard'),
+                        ),
                       ],
                     ),
                   );

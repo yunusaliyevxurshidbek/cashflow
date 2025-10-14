@@ -24,10 +24,13 @@ class DeleteTransactionRequested extends TransactionEvent {
   const DeleteTransactionRequested(this.id);
 }
 
-class ExportJsonRequested extends TransactionEvent {}
+class ExportJsonRequested extends TransactionEvent {
+  final String source; // e.g., 'home' or 'transactions'
+  const ExportJsonRequested({required this.source});
+}
 
 class ImportJsonRequested extends TransactionEvent {
   final String json;
-  const ImportJsonRequested(this.json);
+  final String source; // e.g., 'home' or 'transactions'
+  const ImportJsonRequested(this.json, {required this.source});
 }
-

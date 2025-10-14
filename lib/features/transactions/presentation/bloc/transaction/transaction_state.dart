@@ -27,16 +27,18 @@ class TransactionOperationSuccess extends TransactionState {
 
 class TransactionExportSuccess extends TransactionState {
   final String jsonString;
-  const TransactionExportSuccess(this.jsonString);
+  final String source; // who requested export
+  const TransactionExportSuccess(this.jsonString, {required this.source});
   @override
-  List<Object?> get props => [jsonString];
+  List<Object?> get props => [jsonString, source];
 }
 
 class TransactionImportSuccess extends TransactionState {
   final int countImported;
-  const TransactionImportSuccess(this.countImported);
+  final String source; // who requested import
+  const TransactionImportSuccess(this.countImported, {required this.source});
   @override
-  List<Object?> get props => [countImported];
+  List<Object?> get props => [countImported, source];
 }
 
 class TransactionEmpty extends TransactionState {}
@@ -47,4 +49,3 @@ class TransactionError extends TransactionState {
   @override
   List<Object?> get props => [errorMessage];
 }
-

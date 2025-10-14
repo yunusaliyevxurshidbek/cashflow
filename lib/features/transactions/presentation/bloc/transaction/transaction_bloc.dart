@@ -109,7 +109,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
   Future<void> _onExport(ExportJsonRequested event, Emitter<TransactionState> emit) async {
     try {
       final jsonString = await exportJson( NoParams());
-      emit(TransactionExportSuccess(jsonString));
+      emit(TransactionExportSuccess(jsonString, source: event.source));
       add(LoadTransactionsRequested());
     } catch (e) {
       emit(TransactionError('Export failed: $e'));
@@ -121,7 +121,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
       final count = await importJson(event.json);
       balanceBloc.add(RecomputeBalanceRequested());
       add(LoadTransactionsRequested());
-      emit(TransactionImportSuccess(count));
+      emit(TransactionImportSuccess(count, source: event.source));
     } catch (e) {
       emit(TransactionError('Import failed: $e'));
     }

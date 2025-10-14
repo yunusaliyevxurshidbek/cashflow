@@ -31,9 +31,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return BlocConsumer<TransactionBloc, TransactionState>(
       listener: (context, state) {
-        if (state is TransactionExportSuccess) {
+        if (state is TransactionExportSuccess && state.source == 'home') {
           _showExportDialog(context, state.jsonString);
-        } else if (state is TransactionImportSuccess) {
+        } else if (state is TransactionImportSuccess && state.source == 'home') {
           CustomSnacbar.show(
             context,
             isError: false,
@@ -75,7 +75,7 @@ class _HomePageState extends State<HomePage> {
                     BlendMode.srcIn,
                   ),
                 ),
-                onPressed: () => context.read<TransactionBloc>().add(ExportJsonRequested()),
+                onPressed: () => context.read<TransactionBloc>().add(const ExportJsonRequested(source: 'home')),
                 tooltip: 'Export JSON',
               ),
             ],
@@ -159,7 +159,7 @@ class _HomePageState extends State<HomePage> {
             onPressed: () {
               final json = controller.text.trim();
               if (json.isNotEmpty) {
-                context.read<TransactionBloc>().add(ImportJsonRequested(json));
+                context.read<TransactionBloc>().add(ImportJsonRequested(json, source: 'home'));
                 Navigator.of(context).pop();
               }
             },
