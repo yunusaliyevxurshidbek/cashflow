@@ -8,6 +8,7 @@ import 'package:income_expense_tracker/core/constants/app_typography.dart';
 import 'package:income_expense_tracker/features/transactions/domain/entities/transaction_entity.dart';
 import 'package:income_expense_tracker/features/transactions/presentation/bloc/transaction/transaction_bloc.dart';
 import 'package:income_expense_tracker/features/transactions/presentation/bloc/transaction/transaction_event.dart';
+import 'package:income_expense_tracker/features/transactions/presentation/pages/add_transaction_page/widgets/switchable_buttons.dart';
 import 'package:income_expense_tracker/features/transactions/presentation/widgets/custom_snacbar.dart';
 import 'package:uuid/uuid.dart';
 import '../../../bloc/balance/balance_bloc.dart';
@@ -82,47 +83,14 @@ class _AddPageWidgetState extends State<AddPageWidget> {
                       .copyWith(fontSize: 14.sp),
                 ),
                 AppSpacing.verticalSm,
-                SegmentedButton<TransactionType>(
-                  segments: const [
-                    ButtonSegment(
-                      value: TransactionType.income,
-                      label: Text('Income'),
-                      icon: Icon(Icons.arrow_downward),
-                    ),
-                    ButtonSegment(
-                      value: TransactionType.expense,
-                      label: Text('Expense'),
-                      icon: Icon(Icons.arrow_upward),
-                    ),
-                  ],
-                  selected: {_type},
-                  onSelectionChanged: (s) => setState(() => _type = s.first),
-                  style: ButtonStyle(
-                    visualDensity: VisualDensity.compact,
-                    padding: WidgetStateProperty.all(
-                      const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-                    ),
-                    backgroundColor: WidgetStateProperty.resolveWith((states) {
-                      if (states.contains(WidgetState.selected)) {
-                        return _type == TransactionType.income
-                            ? AppColors.income.withAlpha(52)
-                            : AppColors.expense.withAlpha(52);
-                      }
-                      return AppColors.surface;
-                    }),
-                    foregroundColor: WidgetStateProperty.resolveWith((states) {
-                      if (states.contains(WidgetState.selected)) {
-                        return _type == TransactionType.income
-                            ? AppColors.income
-                            : AppColors.expense;
-                      }
-                      return AppColors.secondaryText;
-                    }),
-                  ),
+                TransactionTypeSwitch(
+                  selected: _type,
+                  onChanged: (v) => setState(() => _type = v),
                 ),
               ],
             ),
           ),
+
           AppSpacing.verticalLg,
 
           // category_field:
