@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:income_expense_tracker/core/constants/app_colors.dart';
+import '../../../domain/entities/transaction_entity.dart';
 import '../../bloc/balance/balance_bloc.dart';
 import '../../bloc/balance/balance_event.dart';
 import '../../bloc/balance/balance_state.dart';
@@ -11,7 +12,9 @@ import '../../bloc/transaction/transaction_bloc.dart';
 import '../../bloc/transaction/transaction_event.dart';
 import '../../bloc/transaction/transaction_state.dart';
 import '../../widgets/custom_snacbar.dart';
+import '../analysis_page/widgets/chart_section.dart';
 import 'widgets/balance_cards.dart';
+import 'widgets/pie_chart_section.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -25,6 +28,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     context.read<BalanceBloc>().add(LoadBalanceRequested());
+    context.read<TransactionBloc>().add(LoadTransactionsRequested());
   }
 
   @override
@@ -83,19 +87,77 @@ class _HomePageState extends State<HomePage> {
           body: Padding(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 12.h),
             child: BlocBuilder<BalanceBloc, BalanceState>(
-              builder: (context, state) {
-                if (state is BalanceLoading) {
+              builder: (context, balanceState) {
+                if (balanceState is BalanceLoading) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                if (state is BalanceLoaded) {
-                  return BalanceCards(
-                    totalIncome: state.totalIncome,
-                    totalExpense: state.totalExpense,
-                    netBalance: state.netBalance,
+                if (balanceState is BalanceLoaded) {
+                  return BlocBuilder<TransactionBloc, TransactionState>(
+                    builder: (context, transactionState) {
+                      if (transactionState is TransactionLoaded) {
+                        final monthlyIncome = List.filled(12, 0.0);
+                        final monthlyExpense = List.filled(12, 0.0);
+
+                        for (final t in transactionState.items) {
+                          final idx = t.date.month - 1;
+                          if (t.type == TransactionType.income) monthlyIncome[idx] += t.amount;
+                          if (t.type == TransactionType.expense) monthlyExpense[idx] += t.amount;
+                        }
+
+                        return Column(
+                          children: [
+                            BalanceCards(
+                              totalIncome: balanceState.totalIncome,
+                              totalExpense: balanceState.totalExpense,
+                              netBalance: balanceState.netBalance,
+                            ),
+                            SizedBox(height: 24.h),
+                            Expanded(
+                              child: DefaultTabController(
+                                length: 2,
+                                child: Column(
+                                  children: [
+                                    const TabBar(
+                                      tabs: [
+                                        Tab(text: 'Line Chart'),
+                                        Tab(text: 'Pie Chart'),
+                                      ],
+                                    ),
+                                    Expanded(
+                                      child: TabBarView(
+                                        children: [
+                                          SingleChildScrollView(
+                                            child: ChartSection(
+                                              monthlyIncome: monthlyIncome,
+                                              monthlyExpense: monthlyExpense,
+                                            ),
+                                          ),
+                                          SingleChildScrollView(
+                                            child: PieChartSection(
+                                              monthlyIncome: monthlyIncome,
+                                              monthlyExpense: monthlyExpense,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      }
+                      return BalanceCards(
+                        totalIncome: balanceState.totalIncome,
+                        totalExpense: balanceState.totalExpense,
+                        netBalance: balanceState.netBalance,
+                      );
+                    },
                   );
                 }
-                if (state is BalanceError) {
-                  return Center(child: Text(state.message));
+                if (balanceState is BalanceError) {
+                  return Center(child: Text(balanceState.message));
                 }
                 return const SizedBox.shrink();
               },

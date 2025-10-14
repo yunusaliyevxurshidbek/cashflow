@@ -1,2 +1,7 @@
-- [x] Add GlobalKey to MainPage for accessing state from AddPageWidget
-- [x] Modify _submit method in AddPageWidget to always clear fields and switch to home tab after saving
+- [x] Modify home_page.dart to load transactions in initState
+- [x] Add BlocBuilder for TransactionBloc in home_page.dart
+- [x] Calculate monthlyIncome and monthlyExpense in home_page.dart
+- [x] Add DefaultTabController, TabBar, and TabBarView below BalanceCards
+- [x] Create PieChartSection widget for pie chart tab
+- [x] Reuse ChartSection for line chart tab
+- [x] Fix UI overflow by making charts responsive with AspectRatio and SingleChildScrollView

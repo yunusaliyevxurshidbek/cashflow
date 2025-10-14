@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../../../core/utils/formatters.dart';
 import '../../../../../../core/constants/app_colors.dart';
 import '../../../../../../core/constants/app_spacing.dart';
 import '../../../../../../core/constants/app_typography.dart';
+import '../../../../../../core/utils/formatters.dart';
 
 class BalanceCards extends StatelessWidget {
   final double totalIncome;

@@ -16,6 +16,7 @@ class ChartSection extends StatelessWidget {
   Widget build(BuildContext context) {
     final maxValue = [...monthlyIncome, ...monthlyExpense].reduce((a, b) => a > b ? a : b);
     final chartMaxY = maxValue * 1.2;
+    final hasData = maxValue > 0;
 
     return Card(
       elevation: 2,
@@ -40,9 +41,11 @@ class ChartSection extends StatelessWidget {
               ],
             ),
             SizedBox(height: 24.h),
-            SizedBox(
-              height: 300.h,
-              child: LineChart(
+            AspectRatio(
+              // Keep the chart responsive to width and avoid fixed heights
+              aspectRatio: 1.6,
+              child: hasData
+                  ? LineChart(
                 LineChartData(
                   minY: 0,
                   maxY: chartMaxY,
@@ -140,6 +143,15 @@ class ChartSection extends StatelessWidget {
                     _buildLine(monthlyIncome, const Color(0xFF4CAF50)),
                     _buildLine(monthlyExpense, const Color(0xFFFF5E5E)),
                   ],
+                ),
+              )
+                  : Center(
+                child: Text(
+                  'No Data',
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: Colors.grey[600],
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             ),

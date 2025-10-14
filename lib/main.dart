@@ -42,6 +42,4 @@ Future<void> main() async {
 }
 
 
-// chart types
-// export import yaxshi ishlamayapti
 // yillarni o'zgartirgandan analysis da error chiqyapti
