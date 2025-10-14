@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
 import 'analysis_page.dart';
+import 'home_page.dart';
 import 'transactions_page.dart';
 import 'add_tab_page.dart';
 
-/// Shell with Animated Notch Bottom Bar and three tabs: Transactions, Analysis, Add
 class ShellPage extends StatefulWidget {
   const ShellPage({super.key});
 
@@ -19,6 +19,7 @@ class _ShellPageState extends State<ShellPage> {
   int _index = 0;
 
   final _pages = const [
+    HomePage(),
     TransactionsPage(),
     AnalysisPage(),
     AddTabPage(),
@@ -48,6 +49,11 @@ class _ShellPageState extends State<ShellPage> {
         durationInMilliSeconds: 220,
         bottomBarItems: [
           BottomBarItem(
+            inActiveItem: Icon(PhosphorIconsRegular.house, size: 22.sp),
+            activeItem: Icon(PhosphorIconsFill.house, size: 22.sp),
+            itemLabel: 'Home',
+          ),
+          BottomBarItem(
             inActiveItem: Icon(PhosphorIconsRegular.list, size: 22.sp),
             activeItem: Icon(PhosphorIconsFill.list, size: 22.sp),
             itemLabel: 'Transactions',
@@ -65,29 +71,10 @@ class _ShellPageState extends State<ShellPage> {
         ],
         onTap: (i) => setState(() => _index = i),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: _BuildCenterFab(onPressed: () => setState(() => _index = 2)),
+
     );
   }
 }
 
-class _BuildCenterFab extends StatelessWidget {
-  final VoidCallback onPressed;
-  const _BuildCenterFab({required this.onPressed});
 
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: 64.w,
-      height: 64.w,
-      child: FloatingActionButton(
-        heroTag: 'add_fab',
-        onPressed: onPressed,
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        elevation: 6,
-        child: Icon(PhosphorIconsBold.plus, color: Colors.black, size: 28.sp),
-      ),
-    );
-  }
-}
 
