@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../../domain/entities/transaction_entity.dart';
+import '../../domain/entities/transaction_entity.dart';
 import '../bloc/filter/filter_state.dart';
 
 typedef OnApplyFilter = void Function(FilterState state);

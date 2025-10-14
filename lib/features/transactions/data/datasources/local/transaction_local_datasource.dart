@@ -1,12 +1,10 @@
 import 'dart:convert';
-
-import 'package:sqflite/sqflite.dart';
+import 'package:sqflite/sqflite.dart' hide DatabaseException;
 import 'package:path/path.dart' as p;
 import 'package:uuid/uuid.dart';
-
+import '../../../domain/entities/transaction_entity.dart';
 import '../../models/transaction_model.dart';
 import '../../../../../../core/errors/exceptions.dart';
-import '../../../../domain/entities/transaction_entity.dart';
 
 class TransactionLocalDataSource {
   final String dbPath;

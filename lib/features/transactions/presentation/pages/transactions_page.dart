@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../../domain/entities/transaction_entity.dart';
+import '../../domain/entities/transaction_entity.dart';
 import '../bloc/filter/filter_bloc.dart';
 import '../bloc/filter/filter_event.dart';
 import '../bloc/filter/filter_state.dart';

@@ -1,7 +1,6 @@
 import 'dart:async';
-
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import '../../../../../core/usecase/usecase.dart';
 import '../../../domain/entities/transaction_entity.dart';
 import '../../../domain/usecases/add_transaction.dart';
 import '../../../domain/usecases/delete_transaction.dart';
@@ -68,7 +67,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
         ));
         emit(items.isEmpty ? TransactionEmpty() : TransactionLoaded(items));
       } else {
-        final items = await getTransactions(const NoParams());
+        final items = await getTransactions( NoParams());
         emit(items.isEmpty ? TransactionEmpty() : TransactionLoaded(items));
       }
     } catch (e) {
@@ -111,7 +110,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
 
   Future<void> _onExport(ExportJsonRequested event, Emitter<TransactionState> emit) async {
     try {
-      final jsonString = await exportJson(const NoParams());
+      final jsonString = await exportJson( NoParams());
       emit(TransactionExportSuccess(jsonString));
     } catch (e) {
       emit(TransactionError('Export failed: $e'));

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-
 import 'features/transactions/presentation/pages/analysis_page.dart';
 import 'features/transactions/presentation/pages/home_page.dart';
 import 'features/transactions/presentation/pages/transaction_form_page.dart';
@@ -26,6 +25,7 @@ class IncomeExpenseApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.teal, brightness: Brightness.dark),
         textTheme: baseTextTheme,
       ),
+      debugShowCheckedModeBanner: false,
       initialRoute: '/',
       routes: {
         '/': (_) => const HomePage(),

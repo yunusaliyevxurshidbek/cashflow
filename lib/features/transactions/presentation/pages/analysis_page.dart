@@ -2,8 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../../domain/entities/transaction_entity.dart';
+import '../../domain/entities/transaction_entity.dart';
 import '../bloc/transaction/transaction_bloc.dart';
 import '../bloc/transaction/transaction_event.dart';
 import '../bloc/transaction/transaction_state.dart';
