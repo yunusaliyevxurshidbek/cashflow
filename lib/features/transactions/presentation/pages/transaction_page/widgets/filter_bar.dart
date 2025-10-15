@@ -21,6 +21,7 @@ class _FilterBarState extends State<FilterBar> {
   DateTime? _end;
   String? _category;
   String? _search;
+  late final TextEditingController _searchController;
 
   @override
   void initState() {
@@ -30,6 +31,31 @@ class _FilterBarState extends State<FilterBar> {
     _end = widget.current.dateEnd;
     _category = widget.current.category;
     _search = widget.current.search;
+    _searchController = TextEditingController(text: _search ?? '');
+  }
+
+  @override
+  void didUpdateWidget(covariant FilterBar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.current != widget.current) {
+      setState(() {
+        _type = widget.current.type;
+        _start = widget.current.dateStart;
+        _end = widget.current.dateEnd;
+        _category = widget.current.category;
+        _search = widget.current.search;
+      });
+      final newText = widget.current.search ?? '';
+      if (_searchController.text != newText) {
+        _searchController.text = newText;
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
   }
 
   @override
@@ -81,6 +107,7 @@ class _FilterBarState extends State<FilterBar> {
             SizedBox(
               width: 180.w,
               child: TextField(
+                controller: _searchController,
                 decoration: const InputDecoration(isDense: true, border: OutlineInputBorder(), labelText: 'Search'),
                 onChanged: (v) => _search = v.trim().isEmpty ? null : v.trim(),
               ),
