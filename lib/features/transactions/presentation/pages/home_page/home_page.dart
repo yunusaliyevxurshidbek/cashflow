@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:income_expense_tracker/core/constants/app_colors.dart';
+import 'package:income_expense_tracker/features/transactions/presentation/pages/home_page/widgets/json_dialogs.dart';
 import '../../../domain/entities/transaction_entity.dart';
 import '../../bloc/balance/balance_bloc.dart';
 import '../../bloc/balance/balance_event.dart';
@@ -24,12 +25,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
-  // Balance cards intro
   late final AnimationController _cardsController;
   late final Animation<double> _cardsFade;
   late final Animation<Offset> _cardsSlide;
 
-  // Tabs + content intro (staggered)
   late final AnimationController _contentController;
   late final Animation<double> _tabsFade;
   late final Animation<Offset> _tabsSlide;
@@ -91,7 +90,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
     return BlocConsumer<TransactionBloc, TransactionState>(
       listener: (context, state) {
         if (state is TransactionExportSuccess && state.source == 'home') {
-          _showExportDialog(context, state.jsonString);
+          JsonDialogs().showExportDialog(context, state.jsonString);
         } else if (state is TransactionImportSuccess && state.source == 'home') {
           CustomSnacbar.show(
             context,
@@ -121,7 +120,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                     BlendMode.srcIn,
                   ),
                 ),
-                onPressed: () => _showImportDialog(context),
+                onPressed: () => JsonDialogs().showImportDialog(context),
                 tooltip: 'Import JSON',
               ),
               IconButton(
@@ -254,70 +253,6 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
           ),
         );
       },
-    );
-  }
-
-  void _showExportDialog(BuildContext context, String jsonString) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Export Data'),
-        content: SingleChildScrollView(
-          child: SelectableText(jsonString),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Close'),
-          ),
-          FilledButton(
-            onPressed: () {
-              Clipboard.setData(ClipboardData(text: jsonString));
-              CustomSnacbar.show(
-                context,
-                isError: false,
-                text: 'JSON copied to clipboard',
-              );
-              Navigator.of(context).pop();
-            },
-            child:  const Text('Copy to Clipboard'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showImportDialog(BuildContext context) {
-    final controller = TextEditingController();
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Import Data'),
-        content: TextField(
-          controller: controller,
-          decoration: const InputDecoration(
-            labelText: 'Paste JSON here',
-            border: OutlineInputBorder(),
-          ),
-          maxLines: 10,
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Cancel'),
-          ),
-          FilledButton(
-            onPressed: () {
-              final json = controller.text.trim();
-              if (json.isNotEmpty) {
-                context.read<TransactionBloc>().add(ImportJsonRequested(json, source: 'home'));
-                Navigator.of(context).pop();
-              }
-            },
-            child: const Text('Import'),
-          ),
-        ],
-      ),
     );
   }
 }
