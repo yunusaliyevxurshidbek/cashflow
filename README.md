@@ -1,4 +1,4 @@
-# CashFlow Income Expense Tracker
+# CashFlow - Income Expense Tracker
 
 A production-ready, clean architecture Flutter app to track personal income and expenses. Uses BLoC (flutter_bloc), SQLite (sqflite), Material 3 UI, charts (fl_chart), and Google Fonts. Includes JSON import/export and robust filtering.
 

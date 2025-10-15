@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart' hide DatabaseException;
-import 'package:uuid/uuid.dart';
 import '../../../../../../core/errors/exceptions.dart';
 import '../../../domain/entities/transaction_entity.dart';
 import '../../models/transaction_model.dart';
@@ -10,7 +9,6 @@ class TransactionLocalDataSource {
   final String dbPath;
   Database? _db;
   static const _table = 'transactions';
-  static const _uuid = Uuid();
 
   TransactionLocalDataSource({required this.dbPath});
 
@@ -56,12 +54,7 @@ class TransactionLocalDataSource {
     final db = _requireDb;
     final count = Sqflite.firstIntValue(await db.rawQuery('SELECT COUNT(*) FROM $_table')) ?? 0;
     if (count > 0) return;
-    final now = DateTime.now();
-    final samples = <TransactionModel>[
-      TransactionModel(id: _uuid.v4(), type: 'income', category: 'Salary', amount: 3200, date: now.subtract(const Duration(days: 5)).millisecondsSinceEpoch, note: 'Monthly salary'),
-      TransactionModel(id: _uuid.v4(), type: 'expense', category: 'Food', amount: 45.5, date: now.subtract(const Duration(days: 2)).millisecondsSinceEpoch, note: 'Groceries'),
-      TransactionModel(id: _uuid.v4(), type: 'expense', category: 'Transport', amount: 15.25, date: now.subtract(const Duration(days: 1)).millisecondsSinceEpoch, note: 'Bus pass'),
-    ];
+    final samples = <TransactionModel>[];
     final batch = db.batch();
     for (final m in samples) {
       batch.insert(_table, m.toJson(), conflictAlgorithm: ConflictAlgorithm.replace);

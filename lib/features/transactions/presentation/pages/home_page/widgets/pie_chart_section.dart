@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:income_expense_tracker/core/constants/app_colors.dart';
 
 class Legend extends StatelessWidget {
   final Color color;
@@ -55,25 +56,17 @@ class PieChartSection extends StatelessWidget {
         elevation: 2,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
         child: Padding(
-          padding: EdgeInsets.all(16.w),
-          child: Column(
-            spacing: 24.h,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                'Income vs Expense',
-                style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Center(
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 32.h),
+          child: Center(
                 child: Text(
-                  'No data available',
-                  style: Theme.of(context).textTheme.titleMedium,
+                  'No data yet',
+                  style: TextStyle(
+                    color: AppColors.secondaryText,
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
-            ],
-          ),
         ),
       );
     }

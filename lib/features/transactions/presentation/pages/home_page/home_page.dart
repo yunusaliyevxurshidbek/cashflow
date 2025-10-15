@@ -167,6 +167,165 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           if (t.type == TransactionType.expense) monthlyExpense[idx] += t.amount;
                         }
 
+                        final totalIncome = monthlyIncome.reduce((a, b) => a + b);
+                        final totalExpense = monthlyExpense.reduce((a, b) => a + b);
+                        final hasData = totalIncome + totalExpense > 0;
+
+                        if (!hasData) {
+                          return Column(
+                            spacing: 24.h,
+                            children: [
+                              FadeTransition(
+                                opacity: _cardsFade,
+                                child: SlideTransition(
+                                  position: _cardsSlide,
+                                  child: BalanceCards(
+                                    totalIncome: balanceState.totalIncome,
+                                    totalExpense: balanceState.totalExpense,
+                                    netBalance: balanceState.netBalance,
+                                  ),
+                                ),
+                              ),
+                              Expanded(
+                                child: Card(
+                                  elevation: 2,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 32.h),
+                                    child: Center(
+                                      child: Text(
+                                        'No data yet',
+                                        style: TextStyle(
+                                          color: AppColors.secondaryText,
+                                          fontSize: 18.sp,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        }
+
+                        return Column(
+                          spacing: 24.h,
+                          children: [
+                            FadeTransition(
+                              opacity: _cardsFade,
+                              child: SlideTransition(
+                                position: _cardsSlide,
+                                child: BalanceCards(
+                                  totalIncome: balanceState.totalIncome,
+                                  totalExpense: balanceState.totalExpense,
+                                  netBalance: balanceState.netBalance,
+                                ),
+                              ),
+                            ),
+                            Expanded(
+                              child: DefaultTabController(
+                                length: 2,
+                                child: Column(
+                                  children: [
+                                    FadeTransition(
+                                      opacity: _tabsFade,
+                                      child: SlideTransition(
+                                        position: _tabsSlide,
+                                        child: const TabBar(
+                                          tabs: [
+                                            Tab(text: 'Line Chart'),
+                                            Tab(text: 'Pie Chart'),
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: FadeTransition(
+                                        opacity: _contentFade,
+                                        child: SlideTransition(
+                                          position: _contentSlide,
+                                          child: TabBarView(
+                                            children: [
+                                              SingleChildScrollView(
+                                                child: ChartSection(
+                                                  monthlyIncome: monthlyIncome,
+                                                  monthlyExpense: monthlyExpense,
+                                                ),
+                                              ),
+                                              SingleChildScrollView(
+                                                child: PieChartSection(
+                                                  monthlyIncome: monthlyIncome,
+                                                  monthlyExpense: monthlyExpense,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          ],
+                        );
+                      }
+
+                      if (transactionState is TransactionEmpty ||
+                          transactionState is TransactionLoading ||
+                          transactionState is TransactionInitial ||
+                          transactionState is TransactionOperationSuccess) {
+                        _transactionsLoaded = true;
+                        if (_balanceLoaded && _transactionsLoaded && !_animationsStarted) {
+                          _animationsStarted = true;
+                          _cardsController.forward();
+                        }
+                        final monthlyIncome = List.filled(12, 0.0);
+                        final monthlyExpense = List.filled(12, 0.0);
+
+                        final totalIncome = monthlyIncome.reduce((a, b) => a + b);
+                        final totalExpense = monthlyExpense.reduce((a, b) => a + b);
+                        final hasData = totalIncome + totalExpense > 0;
+
+                        if (!hasData) {
+                          return Column(
+                            children: [
+                              FadeTransition(
+                                opacity: _cardsFade,
+                                child: SlideTransition(
+                                  position: _cardsSlide,
+                                  child: BalanceCards(
+                                    totalIncome: balanceState.totalIncome,
+                                    totalExpense: balanceState.totalExpense,
+                                    netBalance: balanceState.netBalance,
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 24.h),
+                              Expanded(
+                                child: Card(
+                                  elevation: 2,
+                                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                                  child: Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 32.h),
+                                    child: Center(
+                                      child: Text(
+                                        'No data yet',
+                                        style: TextStyle(
+                                          color: AppColors.secondaryText,
+                                          fontSize: 18.sp,
+                                          fontWeight: FontWeight.w700,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        }
+
                         return Column(
                           children: [
                             FadeTransition(
@@ -229,6 +388,7 @@ class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
                           ],
                         );
                       }
+
                       return FadeTransition(
                         opacity: _cardsFade,
                         child: SlideTransition(

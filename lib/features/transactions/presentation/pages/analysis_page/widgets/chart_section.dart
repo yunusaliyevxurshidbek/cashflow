@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:income_expense_tracker/core/constants/app_colors.dart';
 import 'legend.dart';
 
 class ChartSection extends StatelessWidget {
@@ -42,7 +43,6 @@ class ChartSection extends StatelessWidget {
             ),
             SizedBox(height: 24.h),
             AspectRatio(
-              // Keep the chart responsive to width and avoid fixed heights
               aspectRatio: 1.6,
               child: hasData
                   ? LineChart(
@@ -145,12 +145,20 @@ class ChartSection extends StatelessWidget {
                   ],
                 ),
               )
-                  : Center(
-                child: Text(
-                  'No Data',
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: Colors.grey[600],
-                    fontWeight: FontWeight.w600,
+                  : Card(
+                elevation: 2,
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+                child: Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 32.h),
+                  child: Center(
+                    child: Text(
+                      'No data yet',
+                      style: TextStyle(
+                        color: AppColors.secondaryText,
+                        fontSize: 18.sp,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
                   ),
                 ),
               ),
