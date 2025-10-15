@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:income_expense_tracker/features/transactions/presentation/pages/splash_page.dart';
 import 'core/constants/app_theme.dart';
 import 'core/constants/app_typography.dart';
 import 'features/transactions/presentation/pages/add_transaction_page/add_page.dart';
@@ -18,9 +19,10 @@ class IncomeExpenseApp extends StatelessWidget {
       themeMode: ThemeMode.system,
       theme: light,
       darkTheme: dark,
-      initialRoute: '/',
+      initialRoute: '/splash',
       routes: {
         '/': (_) => MainPage(key: MainPage.globalKey),
+        '/splash': (_) => const SplashPage(),
         '/transactions': (_) => const TransactionsPage(),
         '/form': (_) => const AddPage(),
         '/analysis': (_) => const AnalysisPage(),

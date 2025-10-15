@@ -12,15 +12,15 @@ import 'features/transactions/presentation/bloc/transaction/transaction_event.da
 
 
 Future<void> main() async {
-  WidgetsFlutterBinding.ensureInitialized();
+  runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
 
-  await di.initDependencies();
+    await di.initDependencies();
 
-  FlutterError.onError = (FlutterErrorDetails details) {
-    FlutterError.presentError(details);
-  };
+    FlutterError.onError = (FlutterErrorDetails details) {
+      FlutterError.presentError(details);
+    };
 
-  runZonedGuarded(() {
     runApp(
       ScreenUtilInit(
         designSize: const Size(430, 932),
@@ -42,4 +42,3 @@ Future<void> main() async {
 }
 
 
-// yillarni o'zgartirgandan analysis da error chiqyapti
