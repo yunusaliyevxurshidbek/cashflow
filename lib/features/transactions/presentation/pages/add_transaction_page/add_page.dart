@@ -4,7 +4,8 @@ import 'package:income_expense_tracker/features/transactions/presentation/pages/
 import '../../../domain/entities/transaction_entity.dart';
 
 class AddPage extends StatefulWidget {
-  const AddPage({super.key});
+  final bool popOnSubmit;
+  const AddPage({super.key, this.popOnSubmit = false});
 
   @override
   State<AddPage> createState() => _AddPageState();
@@ -54,7 +55,7 @@ class _AddPageState extends State<AddPage> {
         padding: EdgeInsets.all(16.w), 
         child: AddPageWidget(
           initial: _id == null ? null : _buildEntity(), 
-          popOnSubmit: true,
+          popOnSubmit: widget.popOnSubmit,
           ),
         ),
     );

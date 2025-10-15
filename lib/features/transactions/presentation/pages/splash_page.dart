@@ -99,7 +99,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
       Navigator.of(context).pushAndRemoveUntil(
         PageRouteBuilder(
           transitionDuration: Duration.zero,
-          pageBuilder: (context, anim1, anim2) => const MainPage(),
+          pageBuilder: (context, anim1, anim2) => MainPage(key: MainPage.globalKey),
           transitionsBuilder: (context, anim1, anim2, child) {
             return child;
           },

@@ -247,6 +247,11 @@ class _AddPageWidgetState extends State<AddPageWidget> {
     transactionBloc.add(LoadTransactionsRequested());
     balanceBloc.add(LoadBalanceRequested());
 
+    if (widget.popOnSubmit) {
+      Navigator.of(context).pop();
+      return;
+    }
+
     _categoryController.clear();
     _amountController.clear();
     _date = null;

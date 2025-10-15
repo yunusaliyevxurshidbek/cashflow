@@ -24,7 +24,7 @@ class IncomeExpenseApp extends StatelessWidget {
         '/': (_) => MainPage(key: MainPage.globalKey),
         '/splash': (_) => const SplashPage(),
         '/transactions': (_) => const TransactionsPage(),
-        '/form': (_) => const AddPage(),
+        '/form': (_) => const AddPage(popOnSubmit: true),
         '/analysis': (_) => const AnalysisPage(),
       },
     );
