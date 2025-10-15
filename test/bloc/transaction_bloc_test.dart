@@ -62,7 +62,6 @@ void main() {
           date: DateTime.now(),
         )));
         await Future<void>.delayed(const Duration(milliseconds: 10));
-        bloc.add(LoadTransactionsRequested());
       },
       wait: const Duration(milliseconds: 50),
       expect: () => [
@@ -86,7 +85,12 @@ void main() {
       act: (bloc) async {
         bloc.add(const ExportJsonRequested(source: 'test'));
       },
-      expect: () => [isA<TransactionExportSuccess>()],
+      wait: const Duration(milliseconds: 50),
+      expect: () => [
+        isA<TransactionExportSuccess>(),
+        isA<TransactionLoading>(),
+        isA<TransactionEmpty>(),
+      ],
     );
 
     blocTest<TransactionBloc, TransactionState>(
@@ -102,7 +106,12 @@ void main() {
         final json = '[{"id":"i1","type":"income","category":"Bonus","amount":50.0,"date":$now}]';
         bloc.add(ImportJsonRequested(json, source: 'test'));
       },
-      expect: () => [isA<TransactionImportSuccess>()],
+      wait: const Duration(milliseconds: 50),
+      expect: () => [
+        isA<TransactionImportSuccess>(),
+        isA<TransactionLoading>(),
+        isA<TransactionLoaded>(),
+      ],
     );
   });
 }

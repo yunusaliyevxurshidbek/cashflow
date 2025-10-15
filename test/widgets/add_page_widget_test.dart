@@ -8,7 +8,11 @@ void main() {
   Widget wrap(Widget child) {
     return ScreenUtilInit(
       designSize: const Size(430, 932),
-      builder: (_, __) => MaterialApp(home: Scaffold(body: child)),
+      builder: (_, __) => MaterialApp(
+        home: Scaffold(
+          body: SingleChildScrollView(child: child),
+        ),
+      ),
     );
   }
 
@@ -24,9 +28,8 @@ void main() {
       amount: 10,
       date: DateTime.now(),
     );
-    await tester.pumpWidget(wrap(AddPageWidget(initial: initial)));
+    await tester.pumpWidget(wrap(AddPageWidget(key: UniqueKey(), initial: initial)));
     await tester.pumpAndSettle();
     expect(find.text('Update Transaction'), findsOneWidget);
   });
 }
-

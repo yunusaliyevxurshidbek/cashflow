@@ -75,6 +75,8 @@ lib/
 Uses `flutter_lints` via `analysis_options.yaml`.
 
 ## testing
-- Unit tests for use cases and BLoC flows with `bloc_test`.
-- Example commands: flutter test
+- Unit tests for use cases and BLoC flows with bloc_test.
+- Widget tests for UI components and pages.
+- Integration tests simulate full app flow (add, list, filter).
+  • All tests pass (check by flutter test)
 
