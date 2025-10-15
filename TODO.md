@@ -1,5 +1,0 @@
-- [x] Add flags for data loading: _balanceLoaded, _transactionsLoaded, _animationsStarted
-- [x] Add listener to _cardsController to start content animation when cards complete
-- [x] Modify BlocBuilder for BalanceBloc to set _balanceLoaded = true when BalanceLoaded
-- [x] Modify BlocBuilder for TransactionBloc to set _transactionsLoaded = true when TransactionLoaded
-- [x] In build, check if both loaded and not started, then start cards animation
