@@ -23,12 +23,67 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with TickerProviderStateMixin {
+  // Balance cards intro
+  late final AnimationController _cardsController;
+  late final Animation<double> _cardsFade;
+  late final Animation<Offset> _cardsSlide;
+
+  // Tabs + content intro (staggered)
+  late final AnimationController _contentController;
+  late final Animation<double> _tabsFade;
+  late final Animation<Offset> _tabsSlide;
+  late final Animation<double> _contentFade;
+  late final Animation<Offset> _contentSlide;
+
+  bool _balanceLoaded = false;
+  bool _transactionsLoaded = false;
+  bool _animationsStarted = false;
   @override
   void initState() {
     super.initState();
+    _cardsController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 500),
+    );
+    _cardsFade = CurvedAnimation(
+      parent: _cardsController,
+      curve: Curves.easeOutCubic,
+    );
+    _cardsSlide = Tween<Offset>(begin: const Offset(0, 0.06), end: Offset.zero)
+        .animate(_cardsFade);
+
+    _contentController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 900),
+    );
+    _tabsFade = CurvedAnimation(
+      parent: _contentController,
+      curve: const Interval(0.0, 0.55, curve: Curves.easeOutCubic),
+    );
+    _tabsSlide = Tween<Offset>(begin: const Offset(0, 0.08), end: Offset.zero)
+        .animate(_tabsFade);
+    _contentFade = CurvedAnimation(
+      parent: _contentController,
+      curve: const Interval(0.35, 1.0, curve: Curves.easeOutCubic),
+    );
+    _contentSlide =
+        Tween<Offset>(begin: const Offset(0, 0.10), end: Offset.zero)
+            .animate(_contentFade);
+    _cardsController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _contentController.forward();
+      }
+    });
     context.read<BalanceBloc>().add(LoadBalanceRequested());
     context.read<TransactionBloc>().add(LoadTransactionsRequested());
+  }
+
+  @override
+  void dispose() {
+    _cardsController.dispose();
+    _contentController.dispose();
+    super.dispose();
   }
 
   @override
@@ -92,9 +147,19 @@ class _HomePageState extends State<HomePage> {
                   return const Center(child: CircularProgressIndicator());
                 }
                 if (balanceState is BalanceLoaded) {
+                  _balanceLoaded = true;
+                  if (_balanceLoaded && _transactionsLoaded && !_animationsStarted) {
+                    _animationsStarted = true;
+                    _cardsController.forward();
+                  }
                   return BlocBuilder<TransactionBloc, TransactionState>(
                     builder: (context, transactionState) {
                       if (transactionState is TransactionLoaded) {
+                        _transactionsLoaded = true;
+                        if (_balanceLoaded && _transactionsLoaded && !_animationsStarted) {
+                          _animationsStarted = true;
+                          _cardsController.forward();
+                        }
                         final monthlyIncome = List.filled(12, 0.0);
                         final monthlyExpense = List.filled(12, 0.0);
 
@@ -106,10 +171,16 @@ class _HomePageState extends State<HomePage> {
 
                         return Column(
                           children: [
-                            BalanceCards(
-                              totalIncome: balanceState.totalIncome,
-                              totalExpense: balanceState.totalExpense,
-                              netBalance: balanceState.netBalance,
+                            FadeTransition(
+                              opacity: _cardsFade,
+                              child: SlideTransition(
+                                position: _cardsSlide,
+                                child: BalanceCards(
+                                  totalIncome: balanceState.totalIncome,
+                                  totalExpense: balanceState.totalExpense,
+                                  netBalance: balanceState.netBalance,
+                                ),
+                              ),
                             ),
                             SizedBox(height: 24.h),
                             Expanded(
@@ -117,28 +188,40 @@ class _HomePageState extends State<HomePage> {
                                 length: 2,
                                 child: Column(
                                   children: [
-                                    const TabBar(
-                                      tabs: [
-                                        Tab(text: 'Line Chart'),
-                                        Tab(text: 'Pie Chart'),
-                                      ],
+                                    FadeTransition(
+                                      opacity: _tabsFade,
+                                      child: SlideTransition(
+                                        position: _tabsSlide,
+                                        child: const TabBar(
+                                          tabs: [
+                                            Tab(text: 'Line Chart'),
+                                            Tab(text: 'Pie Chart'),
+                                          ],
+                                        ),
+                                      ),
                                     ),
                                     Expanded(
-                                      child: TabBarView(
-                                        children: [
-                                          SingleChildScrollView(
-                                            child: ChartSection(
-                                              monthlyIncome: monthlyIncome,
-                                              monthlyExpense: monthlyExpense,
-                                            ),
+                                      child: FadeTransition(
+                                        opacity: _contentFade,
+                                        child: SlideTransition(
+                                          position: _contentSlide,
+                                          child: TabBarView(
+                                            children: [
+                                              SingleChildScrollView(
+                                                child: ChartSection(
+                                                  monthlyIncome: monthlyIncome,
+                                                  monthlyExpense: monthlyExpense,
+                                                ),
+                                              ),
+                                              SingleChildScrollView(
+                                                child: PieChartSection(
+                                                  monthlyIncome: monthlyIncome,
+                                                  monthlyExpense: monthlyExpense,
+                                                ),
+                                              ),
+                                            ],
                                           ),
-                                          SingleChildScrollView(
-                                            child: PieChartSection(
-                                              monthlyIncome: monthlyIncome,
-                                              monthlyExpense: monthlyExpense,
-                                            ),
-                                          ),
-                                        ],
+                                        ),
                                       ),
                                     ),
                                   ],
@@ -148,10 +231,16 @@ class _HomePageState extends State<HomePage> {
                           ],
                         );
                       }
-                      return BalanceCards(
-                        totalIncome: balanceState.totalIncome,
-                        totalExpense: balanceState.totalExpense,
-                        netBalance: balanceState.netBalance,
+                      return FadeTransition(
+                        opacity: _cardsFade,
+                        child: SlideTransition(
+                          position: _cardsSlide,
+                          child: BalanceCards(
+                            totalIncome: balanceState.totalIncome,
+                            totalExpense: balanceState.totalExpense,
+                            netBalance: balanceState.netBalance,
+                          ),
+                        ),
                       );
                     },
                   );

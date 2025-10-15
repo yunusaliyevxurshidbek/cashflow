@@ -1,7 +1,5 @@
-- [x] Modify home_page.dart to load transactions in initState
-- [x] Add BlocBuilder for TransactionBloc in home_page.dart
-- [x] Calculate monthlyIncome and monthlyExpense in home_page.dart
-- [x] Add DefaultTabController, TabBar, and TabBarView below BalanceCards
-- [x] Create PieChartSection widget for pie chart tab
-- [x] Reuse ChartSection for line chart tab
-- [x] Fix UI overflow by making charts responsive with AspectRatio and SingleChildScrollView
+- [x] Add flags for data loading: _balanceLoaded, _transactionsLoaded, _animationsStarted
+- [x] Add listener to _cardsController to start content animation when cards complete
+- [x] Modify BlocBuilder for BalanceBloc to set _balanceLoaded = true when BalanceLoaded
+- [x] Modify BlocBuilder for TransactionBloc to set _transactionsLoaded = true when TransactionLoaded
+- [x] In build, check if both loaded and not started, then start cards animation

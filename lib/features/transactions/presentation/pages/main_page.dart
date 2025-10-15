@@ -17,9 +17,11 @@ class MainPage extends StatefulWidget {
   State<MainPage> createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _MainPageState extends State<MainPage> with SingleTickerProviderStateMixin {
   final _controller = NotchBottomBarController(index: 0);
   int _index = 0;
+  late final AnimationController _fadeInController;
+  late final Animation<double> _fadeInAnimation;
 
   void switchToHome() {
     setState(() => _index = 0);
@@ -34,13 +36,37 @@ class _MainPageState extends State<MainPage> {
   ];
 
   @override
+  void initState() {
+    super.initState();
+    _fadeInController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    );
+    _fadeInAnimation = CurvedAnimation(
+      parent: _fadeInController,
+      curve: Curves.easeOutCubic,
+    );
+    // Trigger fade-in when arriving from splash
+    _fadeInController.forward();
+  }
+
+  @override
+  void dispose() {
+    _fadeInController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
-      body: SafeArea(
-        child: IndexedStack(
-          index: _index,
-          children: _pages,
+      body: FadeTransition(
+        opacity: _fadeInAnimation,
+        child: SafeArea(
+          child: IndexedStack(
+            index: _index,
+            children: _pages,
+          ),
         ),
       ),
       extendBody: true,
